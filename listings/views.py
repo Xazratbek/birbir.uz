@@ -1,7 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .serializers import ListingListSerializer, ListingDetailSerializer, ListingCreateSerializer
-from .models import Listing
+from .serializers import DistrictListSerializer, ListingListSerializer, ListingDetailSerializer, ListingCreateSerializer, RegionListSerializer
+from .models import District, Listing, Region
 from .pagination import ListingPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -31,3 +32,19 @@ class ListingCreateAPIView(APIView):
             "status":status.HTTP_201_CREATED,
             "message":"Yangi e'lon qo'shildi"
         })
+    
+
+class RegionsListAPIView(ListAPIView):
+    serializer_class = RegionListSerializer
+    queryset = Region.objects.all()
+
+
+class DistrictsListAPIView(ListAPIView):
+    serializer_class = DistrictListSerializer
+
+    def get_queryset(self):
+        slug = self.kwargs.get('slug')
+
+        return District.objects.filter(
+            region__slug=slug
+        )
