@@ -90,8 +90,6 @@ class Listing(BaseModel):
     is_negotiable = models.BooleanField(default=False)
     has_delivery = models.BooleanField(default=False)
     status = models.CharField(max_length=25, choices=StatusChoice.choices, default=StatusChoice.ACTIVE ,db_index=True)
-    favorite_count = models.PositiveIntegerField(default=0)
-    report_count = models.PositiveIntegerField(default=0)
     published_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField(null=True, blank=True)
 
@@ -128,9 +126,9 @@ class ListingView(BaseModel):
         verbose_name = "E'lon ko'rilishi"
         verbose_name_plural = "E'lon ko'rilishlari"
         indexes = [
-            models.Index(fields=["listing", "created_at"], name="listing_view_created_at_idx"),
-            models.Index(fields=["user", "created_at"], name="listing_view_user_created_at_idx"),
-            models.Index(fields=["session_key", "created_at"], name="listing_view_session_created_at_idx"),
+            models.Index(fields=["listing", "created_at"], name="lview_listing_created_idx"),
+            models.Index(fields=["user", "created_at"], name="lview_user_created_idx"),
+            models.Index(fields=["session_key", "created_at"], name="lview_session_created_idx"),
         ]
 
 class ListingImage(models.Model):
@@ -158,20 +156,6 @@ class ListingContact(BaseModel):
         db_table = "listing_contacts"
         verbose_name = "E'lon aloqa ma'lumoti"
         verbose_name_plural = "E'lon aloqa ma'lumotlari"
-
-
-class ListingDelivery(BaseModel):
-    listing = models.OneToOneField(Listing, on_delete=models.CASCADE, related_name="delivery")
-    has_delivery = models.BooleanField(default=False)
-    delivery_notes = models.CharField(max_length=255, blank=True)
-
-    def __str__(self):
-        return f"{self.listing.title} delivery"
-
-    class Meta:
-        db_table = "listing_deliveries"
-        verbose_name = "E'lon yetkazib berish"
-        verbose_name_plural = "E'lon yetkazib berishlari"
 
 
 class ListingPromotion(BaseModel):

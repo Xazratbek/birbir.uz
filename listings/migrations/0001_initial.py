@@ -70,8 +70,6 @@ class Migration(migrations.Migration):
                 ('is_negotiable', models.BooleanField(default=False)),
                 ('has_delivery', models.BooleanField(default=False)),
                 ('status', models.CharField(choices=[('active', 'Faol'), ('sold', 'Sotilgan'), ('archived', 'Arxivlangan'), ('deleted', "O'chirilgan")], db_index=True, default='active', max_length=25)),
-                ('favorite_count', models.PositiveIntegerField(default=0)),
-                ('report_count', models.PositiveIntegerField(default=0)),
                 ('published_at', models.DateTimeField(blank=True, null=True)),
                 ('expires_at', models.DateTimeField(blank=True, null=True)),
                 ('district', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='listings', to='listings.district')),
@@ -118,22 +116,6 @@ class Migration(migrations.Migration):
                 'verbose_name': "E'lon ko'rilishi",
                 'verbose_name_plural': "E'lon ko'rilishlari",
                 'db_table': 'listing_views',
-            },
-        ),
-        migrations.CreateModel(
-            name='ListingDelivery',
-            fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('has_delivery', models.BooleanField(default=False)),
-                ('delivery_notes', models.CharField(blank=True, max_length=255)),
-                ('listing', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='delivery', to='listings.listing')),
-            ],
-            options={
-                'verbose_name': "E'lon yetkazib berish",
-                'verbose_name_plural': "E'lon yetkazib berishlari",
-                'db_table': 'listing_deliveries',
             },
         ),
         migrations.CreateModel(
@@ -209,15 +191,15 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='listingview',
-            index=models.Index(fields=['listing', 'created_at'], name='listing_view_created_at_idx'),
+            index=models.Index(fields=['listing', 'created_at'], name='lview_listing_created_idx'),
         ),
         migrations.AddIndex(
             model_name='listingview',
-            index=models.Index(fields=['user', 'created_at'], name='listing_view_user_created_at_idx'),
+            index=models.Index(fields=['user', 'created_at'], name='lview_user_created_idx'),
         ),
         migrations.AddIndex(
             model_name='listingview',
-            index=models.Index(fields=['session_key', 'created_at'], name='listing_view_session_created_at_idx'),
+            index=models.Index(fields=['session_key', 'created_at'], name='lview_session_created_idx'),
         ),
         migrations.AddConstraint(
             model_name='district',

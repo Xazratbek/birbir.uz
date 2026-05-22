@@ -1,12 +1,12 @@
 {
-  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5ODc4MjIwLCJpYXQiOjE3Nzk0NDYyMjAsImp0aSI6ImU5YTEwMGU5NGFhZDQ0OTRiMThjOGU0MWRlYmQ5Zjg2IiwidXNlcl9pZCI6IjU3YWYzNjEzLWYyMWItNDRjZi1iYjFiLWM5Mzk0ZmJiNjA4ZCJ9.dE0Gnt5A0mbi46eoiP5GWqEdEnZG0YtuPqzefn333mo",
-  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MjEyNDYyMCwiaWF0IjoxNzc5NDQ2MjIwLCJqdGkiOiIxYTRhNjU1MTU4ZTg0NjlkYjNhYjVhMWE1MzY5ZmNmMiIsInVzZXJfaWQiOiI1N2FmMzYxMy1mMjFiLTQ0Y2YtYmIxYi1jOTM5NGZiYjYwOGQifQ.H2YNdpQ8CD7VRmAneh7AOHURAEB-lyKE4dn9-omiR4Y",
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5ODg2NjI1LCJpYXQiOjE3Nzk0NTQ2MjUsImp0aSI6ImE2MmU4MzMyNThhYzQyNDVhOWNjZGQzMzk0MDNiMjJmIiwidXNlcl9pZCI6IjNmYzc0ODdhLTk2Y2MtNGQ0Zi1hNzlkLWE0ZjhkYWFjNmY0YyJ9.JusZR6pP7SsMQydFZ6MqHNncJmb5Doct_ABhuVEaZDk",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MjEzMzAyNSwiaWF0IjoxNzc5NDU0NjI1LCJqdGkiOiIwMDJlYzQ5MjE1ZDI0NWRiOGNkYjFhYzIyYzZkNjRjYSIsInVzZXJfaWQiOiIzZmM3NDg3YS05NmNjLTRkNGYtYTc5ZC1hNGY4ZGFhYzZmNGMifQ.xTIbum_Yuzf5dlRXVRhSEGRtqS78lSbjabtsRqwDBtM",
   "user": {
-    "id": "57af3613-f21b-44cf-bb1b-c9394fbb608d",
+    "id": "3fc7487a-96cc-4d4f-a79d-a4f8daac6f4c",
     "username": "xazratbek",
     "email": null,
     "phone_number": "+998939498849",
     "bio": "Find what you love and let it kill you",
-    "avatar": "https://zkictpwluvwzfmjtnkkt.supabase.co/storage/v1/object/public/birbiruz/media/avatars/photo_2026-02-10_20.20.07.jpeg"
+    "avatar": "https://zkictpwluvwzfmjtnkkt.supabase.co/storage/v1/object/public/birbiruz/media/avatars/photo_2026-02-10_20_PtzJLPH.20.07.jpeg"
   }
 }

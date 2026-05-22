@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'listings',
     'favorites',
     'payments',
-    'reviews',
 
     #Third party apps
     "django_filters",

@@ -3,7 +3,6 @@ from listings.models import (
     District,
     Listing,
     ListingContact,
-    ListingDelivery,
     ListingImage,
     ListingPromotion,
     ListingReport,
@@ -20,14 +19,9 @@ class ListingContactInline(admin.StackedInline):
     model = ListingContact
     extra = 0
 
-
-class ListingDeliveryInline(admin.StackedInline):
-    model = ListingDelivery
-    extra = 0
-
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
-    inlines = [ListingImageInline, ListingContactInline, ListingDeliveryInline]
+    inlines = [ListingImageInline, ListingContactInline]
     list_display = (
         "id",
         "title",
@@ -43,8 +37,6 @@ class ListingAdmin(admin.ModelAdmin):
         "is_negotiable",
         "has_delivery",
         "status",
-        "favorite_count",
-        "report_count",
         "published_at",
         "created_at",
     )
@@ -114,14 +106,6 @@ class ListingContactAdmin(admin.ModelAdmin):
     search_fields = ("listing__title", "contact_name", "phone_number")
     ordering = ("-created_at",)
     list_filter = ("allow_chat", "allow_call", "allow_telegram", "created_at")
-
-
-@admin.register(ListingDelivery)
-class ListingDeliveryAdmin(admin.ModelAdmin):
-    list_display = ("id", "listing", "has_delivery", "created_at")
-    search_fields = ("listing__title", "delivery_notes")
-    ordering = ("-created_at",)
-    list_filter = ("has_delivery", "created_at")
 
 
 @admin.register(ListingPromotion)

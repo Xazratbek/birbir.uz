@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Listing, ListingImage
+from django.db import transaction
+from django.utils.text import slugify
+from .models import Listing, ListingContact, ListingImage
+from categories.models import Category
 from categories.serializers import CategorySerializer
 from accounts.serializers import UserSerializer
 
@@ -34,10 +37,28 @@ class ListingDetailSerializer(serializers.ModelSerializer):
         model = Listing
         fields = ['id','title','description','price','currency','listing_category','user','condition','latitude','longitude','status','view_count','images']
 
-class ListingCreateSerializer(serializers.ModelSerializer):
-    latitude = serializers.CharField(required=True,write_only=True)
-    longitude = serializers.CharField(required=True,write_only=True)
+class ListingCreateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=150)
+    description = serializers.CharField()
+    price = serializers.DecimalField(max_digits=14, decimal_places=2)
+    currency = serializers.ChoiceField(choices=Listing._meta.get_field("currency").choices)
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source="listing_category")
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    address = serializers.CharField(max_length=255, allow_blank=True, required=False)
+    landmark = serializers.CharField(max_length=255, allow_blank=True, required=False)
+    contact_name = serializers.CharField(max_length=120, allow_blank=True, required=False)
+    contact_phone = serializers.CharField(max_length=20, allow_blank=True, required=False)
+    allow_chat = serializers.BooleanField(required=False, default=True)
+    allow_call = serializers.BooleanField(required=False, default=False)
+    allow_telegram = serializers.BooleanField(required=False, default=False)
+    has_delivery = serializers.BooleanField(required=False, default=False)
+    is_negotiable = serializers.BooleanField(required=False, default=False)
+    images = serializers.ListField(
+        child=serializers.ImageField(max_length=100000,allow_empty_file=True,use_url=False,write_only=True)
+    )
 
-    class Meta:
-        model = Listing
-        fields = ['title','description','price','currency','listing_category','condition','latitude','longitude']
+    def validate(self, attrs):
+        if not (attrs.get("allow_chat") or attrs.get("allow_call") or attrs.get("allow_telegram")):
+            raise serializers.ValidationError("Kamida bitta aloqa usuli tanlanishi kerak.")
+        return attrs

@@ -25,9 +25,9 @@ class ListingCreateAPIView(APIView):
     def post(self, request):
         serializer = ListingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        elon = serializer.save(user=request.user)
+        print(serializer.validated_data)
+        # elon = serializer.save(user=request.user)
         return Response({
             "status":status.HTTP_201_CREATED,
-            "message":"Yangi e'lon qo'shildi",
-            "elon": serializer.data
+            "message":"Yangi e'lon qo'shildi"
         })
