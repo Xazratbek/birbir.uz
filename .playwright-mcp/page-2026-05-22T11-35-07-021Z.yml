@@ -1,0 +1,547 @@
+- generic [ref=e2]:
+  - generic [ref=e1749]:
+    - banner [ref=e1750]:
+      - generic [ref=e1752]:
+        - generic [ref=e1754]:
+          - link "Doska" [ref=e1755] [cursor=pointer]:
+            - /url: https://birbir.uz/uz/olmaliq
+            - img "Doska" [ref=e1756]
+          - generic [ref=e1757]:
+            - button "Olmaliq" [ref=e1758] [cursor=pointer]:
+              - img [ref=e1760]
+              - generic [ref=e1762]: Olmaliq
+            - generic [ref=e1765] [cursor=pointer]:
+              - generic [ref=e1766]:
+                - img [ref=e1767]
+                - generic [ref=e1885]: UZ
+              - img [ref=e1886]
+        - generic [ref=e1889]:
+          - button [ref=e1893] [cursor=pointer]:
+            - img [ref=e1895]
+          - searchbox "iPhone 15 Pro topish" [ref=e1903]
+          - generic [ref=e1904]:
+            - generic [ref=e1905]:
+              - link [ref=e1907] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/favorites
+                - button [ref=e1908]:
+                  - img [ref=e1911]
+              - button [ref=e1914] [cursor=pointer]:
+                - img [ref=e1917]
+              - button [ref=e1920] [cursor=pointer]:
+                - img [ref=e1923]
+              - button [ref=e1926] [cursor=pointer]:
+                - img [ref=e1929]
+            - link "Sotish" [ref=e1931] [cursor=pointer]:
+              - /url: https://birbir.uz/uz/offers/new
+              - generic [ref=e1932]: Sotish
+              - img [ref=e1934]
+    - main [ref=e1936]:
+      - generic [ref=e1939]:
+        - complementary [ref=e1940]:
+          - generic [ref=e1941]:
+            - generic [ref=e1942]:
+              - generic [ref=e1943]:
+                - generic [ref=e1946]:
+                  - paragraph [ref=e1947]: Ya Pokupayu
+                  - paragraph [ref=e1948]: BirBir'da Aprel 2026 dan beri
+                - list [ref=e1950]:
+                  - listitem [ref=e1951]:
+                    - generic [ref=e1952]:
+                      - generic [ref=e1953]:
+                        - img [ref=e1954]
+                        - paragraph [ref=e1957]: "200"
+                      - paragraph [ref=e1958]: e'lon
+                  - listitem [ref=e1959]:
+                    - generic [ref=e1960]:
+                      - generic [ref=e1961]:
+                        - img [ref=e1962]
+                        - paragraph [ref=e1964]: "0"
+                      - paragraph [ref=e1965]: obunachilar
+                  - listitem [ref=e1966]:
+                    - generic [ref=e1967]:
+                      - 'img "Rating: 0 out of 5 stars" [ref=e1969]':
+                        - generic [ref=e1970]:
+                          - img [ref=e1971]
+                          - generic [ref=e1973]: "0.0"
+                      - button "Baholash" [ref=e1974] [cursor=pointer]:
+                        - generic [ref=e1976]:
+                          - paragraph [ref=e1977]: Baholash
+                          - img [ref=e1978]
+              - generic [ref=e1980]:
+                - button "Do'kon" [ref=e1981] [cursor=pointer]:
+                  - img [ref=e1983]
+                  - generic [ref=e1985]: Do'kon
+                  - img [ref=e1987]
+                - button "ID tasdiqlangan" [ref=e1989] [cursor=pointer]:
+                  - img [ref=e1991]
+                  - generic [ref=e1993]: ID tasdiqlangan
+                  - img [ref=e1995]
+              - button "Obuna bo'lish" [ref=e1998] [cursor=pointer]:
+                - generic [ref=e1999]: Obuna bo'lish
+            - generic [ref=e2000]:
+              - img "review" [ref=e2001]
+              - paragraph [ref=e2002]: Sotuvchi yoki mahsulot haqida sharh qoldiringf
+              - button "Sharh qoldirish" [ref=e2003] [cursor=pointer]:
+                - generic [ref=e2004]: Sharh qoldirish
+        - generic [ref=e2006]:
+          - generic [ref=e2007]:
+            - heading "E'lonlar" [level=3] [ref=e2009]
+            - generic [ref=e2010]:
+              - tablist [ref=e2011]:
+                - tab "Faollar 99+" [selected] [ref=e2012]:
+                  - generic [ref=e2013]:
+                    - paragraph [ref=e2014]: Faollar
+                    - generic [ref=e2015]: 99+
+                - tab "Arxiv 4" [ref=e2016]:
+                  - generic [ref=e2017]:
+                    - paragraph [ref=e2018]: Arxiv
+                    - generic [ref=e2019]: "4"
+              - tabpanel "Faollar 99+"
+            - generic [ref=e2020]:
+              - generic [ref=e2021]:
+                - generic [ref=e2023]:
+                  - generic [ref=e2024]:
+                    - generic [ref=e2027]:
+                      - img [ref=e2029]
+                      - generic [ref=e2031]: Do'kon
+                    - img "Garnier Skin Naturals yuz yuvish uchun gel-ko‘pik, gialuron kislotasi va aloe vera bilan" [ref=e2033]
+                    - button "Sevimlilarga qo'shish" [ref=e2034] [cursor=pointer]:
+                      - img [ref=e2035]
+                  - generic [ref=e2038]:
+                    - paragraph [ref=e2039]: 40 000 so'm
+                    - heading "Garnier Skin Naturals yuz yuvish uchun gel-ko‘pik, gialuron kislotasi va aloe vera bilan" [level=2] [ref=e2040]
+                  - generic [ref=e2042]:
+                    - paragraph [ref=e2043]: Olmaliq
+                    - paragraph [ref=e2044]: Bugun, 16:27
+                  - link "Garnier Skin Naturals yuz yuvish uchun gel-ko‘pik, gialuron kislotasi va aloe vera bilan" [ref=e2045] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/gel-penka-dlya-umyvaniya-garnier-skin-naturals-s-gialuronovoy-kislotoy-i-aloe-vera-242032743
+                    - generic [ref=e2046]: Garnier Skin Naturals yuz yuvish uchun gel-ko‘pik, gialuron kislotasi va aloe vera bilan
+                - generic [ref=e2048]:
+                  - generic [ref=e2049]:
+                    - generic [ref=e2052]:
+                      - img [ref=e2054]
+                      - generic [ref=e2056]: Do'kon
+                    - img "Garnier C vitamini bilan yuz yuvish uchun gel-ko‘pik, 200 ml" [ref=e2058]
+                    - button "Sevimlilarga qo'shish" [ref=e2059] [cursor=pointer]:
+                      - img [ref=e2060]
+                  - generic [ref=e2063]:
+                    - paragraph [ref=e2064]: 40 000 so'm
+                    - heading "Garnier C vitamini bilan yuz yuvish uchun gel-ko‘pik, 200 ml" [level=2] [ref=e2065]
+                  - generic [ref=e2067]:
+                    - paragraph [ref=e2068]: Olmaliq
+                    - paragraph [ref=e2069]: Bugun, 16:24
+                  - link "Garnier C vitamini bilan yuz yuvish uchun gel-ko‘pik, 200 ml" [ref=e2070] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/gel-penka-dlya-umyvaniya-garnier-s-vitaminom-s-200-ml-242031970
+                    - generic [ref=e2071]: Garnier C vitamini bilan yuz yuvish uchun gel-ko‘pik, 200 ml
+                - generic [ref=e2073]:
+                  - generic [ref=e2074]:
+                    - generic [ref=e2077]:
+                      - img [ref=e2079]
+                      - generic [ref=e2081]: Do'kon
+                    - img "Uzum ekstrakti bilan Garnier «Asosiy parvarish» tozalovchi gel-ko‘pik" [ref=e2083]
+                    - button "Sevimlilarga qo'shish" [ref=e2084] [cursor=pointer]:
+                      - img [ref=e2085]
+                  - generic [ref=e2088]:
+                    - paragraph [ref=e2089]: 40 000 so'm
+                    - heading "Uzum ekstrakti bilan Garnier «Asosiy parvarish» tozalovchi gel-ko‘pik" [level=2] [ref=e2090]
+                  - generic [ref=e2092]:
+                    - paragraph [ref=e2093]: Olmaliq
+                    - paragraph [ref=e2094]: Bugun, 16:22
+                  - link "Uzum ekstrakti bilan Garnier «Asosiy parvarish» tozalovchi gel-ko‘pik" [ref=e2095] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/ochishchayushchaya-gel-penka-garnier-osnovnoy-ukhod-s-ekstraktom-vinograda-242031469
+                    - generic [ref=e2096]: Uzum ekstrakti bilan Garnier «Asosiy parvarish» tozalovchi gel-ko‘pik
+                - generic [ref=e2098]:
+                  - generic [ref=e2099]:
+                    - generic [ref=e2102]:
+                      - img [ref=e2104]
+                      - generic [ref=e2106]: Do'kon
+                    - img "Perioe Propolis Toothpaste tish pastasi" [ref=e2108]
+                    - button "Sevimlilarga qo'shish" [ref=e2109] [cursor=pointer]:
+                      - img [ref=e2110]
+                  - generic [ref=e2113]:
+                    - paragraph [ref=e2114]: 40 000 so'm
+                    - heading "Perioe Propolis Toothpaste tish pastasi" [level=2] [ref=e2115]
+                  - generic [ref=e2117]:
+                    - paragraph [ref=e2118]: Olmaliq
+                    - paragraph [ref=e2119]: Bugun, 16:16
+                  - link "Perioe Propolis Toothpaste tish pastasi" [ref=e2120] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/gigiena-vositalari/o/zubnaya-pasta-propolis-toothpaste-perioe-242017592
+                    - generic [ref=e2121]: Perioe Propolis Toothpaste tish pastasi
+                - generic [ref=e2123]:
+                  - generic [ref=e2124]:
+                    - generic [ref=e2127]:
+                      - img [ref=e2129]
+                      - generic [ref=e2131]: Do'kon
+                    - img "Garnier Skin Naturals 3-in-1 yuz uchun gel, skrab va niqob" [ref=e2133]
+                    - button "Sevimlilarga qo'shish" [ref=e2134] [cursor=pointer]:
+                      - img [ref=e2135]
+                  - generic [ref=e2138]:
+                    - paragraph [ref=e2139]: 85 000 so'm
+                    - heading "Garnier Skin Naturals 3-in-1 yuz uchun gel, skrab va niqob" [level=2] [ref=e2140]
+                  - generic [ref=e2142]:
+                    - paragraph [ref=e2143]: Olmaliq
+                    - paragraph [ref=e2144]: Bugun, 16:11
+                  - link "Garnier Skin Naturals 3-in-1 yuz uchun gel, skrab va niqob" [ref=e2145] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/gel-skrab-i-maska-dlya-litsa-garnier-skin-naturals-3-v-1-242028055
+                    - generic [ref=e2146]: Garnier Skin Naturals 3-in-1 yuz uchun gel, skrab va niqob
+                - generic [ref=e2148]:
+                  - generic [ref=e2149]:
+                    - generic [ref=e2152]:
+                      - img [ref=e2154]
+                      - generic [ref=e2156]: Do'kon
+                    - img "Garnier Skin Naturals Vitamin C+ 4% yuz uchun serum (vitamin C, niatsinamid, salitsil kislotasi, melasil)" [ref=e2158]
+                    - button "Sevimlilarga qo'shish" [ref=e2159] [cursor=pointer]:
+                      - img [ref=e2160]
+                  - generic [ref=e2163]:
+                    - paragraph [ref=e2164]: 130 000 so'm
+                    - heading "Garnier Skin Naturals Vitamin C+ 4% yuz uchun serum (vitamin C, niatsinamid, salitsil kislotasi, melasil)" [level=2] [ref=e2165]
+                  - generic [ref=e2167]:
+                    - paragraph [ref=e2168]: Olmaliq
+                    - paragraph [ref=e2169]: Bugun, 16:10
+                  - link "Garnier Skin Naturals Vitamin C+ 4% yuz uchun serum (vitamin C, niatsinamid, salitsil kislotasi, melasil)" [ref=e2170] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/syvorotka-dlya-litsa-garnier-skin-naturals-vitamin-c-4-vitamin-c-niatsinamid-salitsilovaya-kislota-melasil-242023406
+                    - generic [ref=e2171]: Garnier Skin Naturals Vitamin C+ 4% yuz uchun serum (vitamin C, niatsinamid, salitsil kislotasi, melasil)
+                - generic [ref=e2173]:
+                  - generic [ref=e2174]:
+                    - generic [ref=e2177]:
+                      - img [ref=e2179]
+                      - generic [ref=e2181]: Do'kon
+                    - img "Garnier Skin Naturals AHA + BHA «Toza teri» yuz uchun zardob" [ref=e2183]
+                    - button "Sevimlilarga qo'shish" [ref=e2184] [cursor=pointer]:
+                      - img [ref=e2185]
+                  - generic [ref=e2188]:
+                    - paragraph [ref=e2189]: 130 000 so'm
+                    - heading "Garnier Skin Naturals AHA + BHA «Toza teri» yuz uchun zardob" [level=2] [ref=e2190]
+                  - generic [ref=e2192]:
+                    - paragraph [ref=e2193]: Olmaliq
+                    - paragraph [ref=e2194]: Bugun, 16:09
+                  - link "Garnier Skin Naturals AHA + BHA «Toza teri» yuz uchun zardob" [ref=e2195] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/kosmetika/o/syvorotka-dlya-litsa-garnier-skin-naturals-aha-bha-chistaya-kozha-242024744
+                    - generic [ref=e2196]: Garnier Skin Naturals AHA + BHA «Toza teri» yuz uchun zardob
+                - generic [ref=e2198]:
+                  - generic [ref=e2199]:
+                    - generic [ref=e2202]:
+                      - img [ref=e2204]
+                      - generic [ref=e2206]: Do'kon
+                    - img "W.H.A.T. Bamboo Salt (죽염) tish pastasi" [ref=e2208]
+                    - button "Sevimlilarga qo'shish" [ref=e2209] [cursor=pointer]:
+                      - img [ref=e2210]
+                  - generic [ref=e2213]:
+                    - paragraph [ref=e2214]: 40 000 so'm
+                    - heading "W.H.A.T. Bamboo Salt (죽염) tish pastasi" [level=2] [ref=e2215]
+                  - generic [ref=e2217]:
+                    - paragraph [ref=e2218]: Olmaliq
+                    - paragraph [ref=e2219]: Bugun, 12:42
+                  - link "W.H.A.T. Bamboo Salt (죽염) tish pastasi" [ref=e2220] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/gigiena-vositalari/o/zubnaya-pasta-w-h-a-t-bamboo-salt-jug-yeom-241951134
+                    - generic [ref=e2221]: W.H.A.T. Bamboo Salt (죽염) tish pastasi
+                - generic [ref=e2223]:
+                  - generic [ref=e2224]:
+                    - generic [ref=e2227]:
+                      - img [ref=e2229]
+                      - generic [ref=e2231]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2233] [cursor=pointer]:
+                      - img [ref=e2234]
+                  - generic [ref=e2237]:
+                    - paragraph [ref=e2238]: 20 000 so'm
+                    - heading "Bolalar uchun SPLAT Juicy tish pastasi ftorсыз" [level=2] [ref=e2239]
+                  - generic [ref=e2241]:
+                    - paragraph [ref=e2242]: Olmaliq
+                    - paragraph [ref=e2243]: Bugun, 12:40
+                  - link "Bolalar uchun SPLAT Juicy tish pastasi ftorсыз" [ref=e2244] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/gigiena-vositalari/o/detskaya-zubnaya-pasta-splat-juicy-bez-ftora-241950846
+                    - generic [ref=e2245]: Bolalar uchun SPLAT Juicy tish pastasi ftorсыз
+                - generic [ref=e2247]:
+                  - generic [ref=e2248]:
+                    - generic [ref=e2251]:
+                      - img [ref=e2253]
+                      - generic [ref=e2255]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2257] [cursor=pointer]:
+                      - img [ref=e2258]
+                  - generic [ref=e2261]:
+                    - paragraph [ref=e2262]: 55 000 so'm
+                    - heading "Sarg‘ayishni neytrallash, oziqlantirish va parvarish uchun MYMUSE tonlovchi shampun" [level=2] [ref=e2263]
+                  - generic [ref=e2265]:
+                    - paragraph [ref=e2266]: Olmaliq
+                    - paragraph [ref=e2267]: Bugun, 12:30
+                  - link "Sarg‘ayishni neytrallash, oziqlantirish va parvarish uchun MYMUSE tonlovchi shampun" [ref=e2268] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/toniruyushchiy-shampun-mymuse-dlya-neytralizatsii-zheltizny-pitaniye-i-ukhod-241946694
+                    - generic [ref=e2269]: Sarg‘ayishni neytrallash, oziqlantirish va parvarish uchun MYMUSE tonlovchi shampun
+                - generic [ref=e2271]:
+                  - generic [ref=e2272]:
+                    - generic [ref=e2275]:
+                      - img [ref=e2277]
+                      - generic [ref=e2279]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2281] [cursor=pointer]:
+                      - img [ref=e2282]
+                  - generic [ref=e2285]:
+                    - paragraph [ref=e2286]: 75 000 so'm
+                    - heading "Soch turmagi uchun kuchli fiksatsiyali mat mum Ollin Beauty Style" [level=2] [ref=e2287]
+                  - generic [ref=e2289]:
+                    - paragraph [ref=e2290]: Olmaliq
+                    - paragraph [ref=e2291]: 21.05.2026, 10:56
+                  - link "Soch turmagi uchun kuchli fiksatsiyali mat mum Ollin Beauty Style" [ref=e2292] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/matovyy-vosk-dlya-ukladki-volos-silnoy-fiksatsii-ollin-beauty-style-241475636
+                    - generic [ref=e2293]: Soch turmagi uchun kuchli fiksatsiyali mat mum Ollin Beauty Style
+                - generic [ref=e2295]:
+                  - generic [ref=e2296]:
+                    - generic [ref=e2299]:
+                      - img [ref=e2301]
+                      - generic [ref=e2303]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2305] [cursor=pointer]:
+                      - img [ref=e2306]
+                  - generic [ref=e2309]:
+                    - paragraph [ref=e2310]: 60 000 so'm
+                    - heading "MELIOR ammonyaksiz soch bo‘yoği (Koreya)" [level=2] [ref=e2311]
+                  - generic [ref=e2313]:
+                    - paragraph [ref=e2314]: Olmaliq
+                    - paragraph [ref=e2315]: 20.05.2026, 14:09
+                  - link "MELIOR ammonyaksiz soch bo‘yoği (Koreya)" [ref=e2316] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/melior-kraska-dlya-volos-bez-ammiaka-koreya-241130638
+                    - generic [ref=e2317]: MELIOR ammonyaksiz soch bo‘yoği (Koreya)
+                - generic [ref=e2319]:
+                  - generic [ref=e2320]:
+                    - generic [ref=e2323]:
+                      - img [ref=e2325]
+                      - generic [ref=e2327]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2329] [cursor=pointer]:
+                      - img [ref=e2330]
+                  - generic [ref=e2333]:
+                    - paragraph [ref=e2334]: 50 000 so'm
+                    - heading "Rexona Perfume Collection parfyumeriyalangan dezodorant-antiperspirantlar" [level=2] [ref=e2335]
+                  - generic [ref=e2337]:
+                    - paragraph [ref=e2338]: Olmaliq
+                    - paragraph [ref=e2339]: 20.05.2026, 12:03
+                  - link "Rexona Perfume Collection parfyumeriyalangan dezodorant-antiperspirantlar" [ref=e2340] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/gigiena-vositalari/o/parfyumirovannyye-dezodoranty-antiperspiranty-rexona-perfume-collection-241091391
+                    - generic [ref=e2341]: Rexona Perfume Collection parfyumeriyalangan dezodorant-antiperspirantlar
+                - generic [ref=e2343]:
+                  - generic [ref=e2344]:
+                    - generic [ref=e2347]:
+                      - img [ref=e2349]
+                      - generic [ref=e2351]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2353] [cursor=pointer]:
+                      - img [ref=e2354]
+                  - generic [ref=e2357]:
+                    - paragraph [ref=e2358]: 45 000 so'm
+                    - heading "Dr.Rashel 2in1" [level=2] [ref=e2359]
+                  - generic [ref=e2361]:
+                    - paragraph [ref=e2362]: Olmaliq
+                    - paragraph [ref=e2363]: 20.05.2026, 11:14
+                  - link "Dr.Rashel 2in1" [ref=e2364] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/gigiena-vositalari/o/dr-rashel-2v1-241075031
+                    - generic [ref=e2365]: Dr.Rashel 2in1
+                - generic [ref=e2367]:
+                  - generic [ref=e2368]:
+                    - generic [ref=e2371]:
+                      - img [ref=e2373]
+                      - generic [ref=e2375]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2377] [cursor=pointer]:
+                      - img [ref=e2378]
+                  - generic [ref=e2381]:
+                    - paragraph [ref=e2382]: 20 000 so'm
+                    - heading "REFTAMID" [level=2] [ref=e2383]
+                  - generic [ref=e2385]:
+                    - paragraph [ref=e2386]: Olmaliq
+                    - paragraph [ref=e2387]: 20.05.2026, 10:36
+                  - link "REFTAMID" [ref=e2388] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/boshqa/o/reftamid-241064261
+                    - generic [ref=e2389]: REFTAMID
+                - generic [ref=e2391]:
+                  - generic [ref=e2392]:
+                    - generic [ref=e2395]:
+                      - img [ref=e2397]
+                      - generic [ref=e2399]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2401] [cursor=pointer]:
+                      - img [ref=e2402]
+                  - generic [ref=e2405]:
+                    - paragraph [ref=e2406]: 35 000 so'm
+                    - heading "REFTAMID BABY" [level=2] [ref=e2407]
+                  - generic [ref=e2409]:
+                    - paragraph [ref=e2410]: Olmaliq
+                    - paragraph [ref=e2411]: 20.05.2026, 10:30
+                  - link "REFTAMID BABY" [ref=e2412] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/boshqa/o/reftamid-baby-241062698
+                    - generic [ref=e2413]: REFTAMID BABY
+                - generic [ref=e2415]:
+                  - generic [ref=e2416]:
+                    - generic [ref=e2419]:
+                      - img [ref=e2421]
+                      - generic [ref=e2423]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2425] [cursor=pointer]:
+                      - img [ref=e2426]
+                  - generic [ref=e2429]:
+                    - paragraph [ref=e2430]: 45 000 so'm
+                    - heading "Sochlarni chuqur namlantiruvchi balzam Dr. Sante Hyaluron Hair Deep Hydration" [level=2] [ref=e2431]
+                  - generic [ref=e2433]:
+                    - paragraph [ref=e2434]: Olmaliq
+                    - paragraph [ref=e2435]: 20.05.2026, 10:26
+                  - link "Sochlarni chuqur namlantiruvchi balzam Dr. Sante Hyaluron Hair Deep Hydration" [ref=e2436] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/balzam-dlya-glubokogo-uvlazhneniya-volos-dr-sante-hyaluron-hair-deep-hydration-241061587
+                    - generic [ref=e2437]: Sochlarni chuqur namlantiruvchi balzam Dr. Sante Hyaluron Hair Deep Hydration
+                - generic [ref=e2439]:
+                  - generic [ref=e2440]:
+                    - generic [ref=e2443]:
+                      - img [ref=e2445]
+                      - generic [ref=e2447]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2449] [cursor=pointer]:
+                      - img [ref=e2450]
+                  - generic [ref=e2453]:
+                    - paragraph [ref=e2454]: 72 000 so'm
+                    - heading "Soch o‘sishini tezlashtirish va to‘kilishining oldini olish uchun tabiiy termo-effektli niqob (achchiq qalampir, usma yog‘i)" [level=2] [ref=e2455]
+                  - generic [ref=e2457]:
+                    - paragraph [ref=e2458]: Olmaliq
+                    - paragraph [ref=e2459]: 20.05.2026, 09:57
+                  - link "Soch o‘sishini tezlashtirish va to‘kilishining oldini olish uchun tabiiy termo-effektli niqob (achchiq qalampir, usma yog‘i)" [ref=e2460] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/maska-dlya-uskoreniya-rosta-i-profilaktiki-vypadeniya-volos-s-naturalnym-termo-effektom-zhguchiy-perets-maslo-usmy-241050216
+                    - generic [ref=e2461]: Soch o‘sishini tezlashtirish va to‘kilishining oldini olish uchun tabiiy termo-effektli niqob (achchiq qalampir, usma yog‘i)
+                - generic [ref=e2463]:
+                  - generic [ref=e2464]:
+                    - generic [ref=e2467]:
+                      - img [ref=e2469]
+                      - generic [ref=e2471]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2473] [cursor=pointer]:
+                      - img [ref=e2474]
+                  - generic [ref=e2477]:
+                    - paragraph [ref=e2478]: 57 000 so'm
+                    - heading "Compliment Naturalis soch niqobi" [level=2] [ref=e2479]
+                  - generic [ref=e2481]:
+                    - paragraph [ref=e2482]: Olmaliq
+                    - paragraph [ref=e2483]: 20.05.2026, 09:57
+                  - link "Compliment Naturalis soch niqobi" [ref=e2484] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/maska-compliment-naturalis-241050179
+                    - generic [ref=e2485]: Compliment Naturalis soch niqobi
+                - generic [ref=e2487]:
+                  - generic [ref=e2488]:
+                    - generic [ref=e2491]:
+                      - img [ref=e2493]
+                      - generic [ref=e2495]: Do'kon
+                    - button "Sevimlilarga qo'shish" [ref=e2497] [cursor=pointer]:
+                      - img [ref=e2498]
+                  - generic [ref=e2501]:
+                    - paragraph [ref=e2502]: 55 000 so'm
+                    - heading "Sochlar uchun Dr. Sante Hyaluron Hair Deep Hydration niqobi" [level=2] [ref=e2503]
+                  - generic [ref=e2505]:
+                    - paragraph [ref=e2506]: Olmaliq
+                    - paragraph [ref=e2507]: 20.05.2026, 09:57
+                  - link "Sochlar uchun Dr. Sante Hyaluron Hair Deep Hydration niqobi" [ref=e2508] [cursor=pointer]:
+                    - /url: https://birbir.uz/uz/olmaliq/cat/gozallik-va-salomatlik/soch-uchun-mahsulotlar/o/maska-dlya-volos-dr-sante-hyaluron-hair-deep-hydration-241050986
+                    - generic [ref=e2509]: Sochlar uchun Dr. Sante Hyaluron Hair Deep Hydration niqobi
+              - button "Yana ko'rsatish" [ref=e2510] [cursor=pointer]:
+                - generic [ref=e2511]: Yana ko'rsatish
+          - generic [ref=e2512]:
+            - heading "Foydalanuvchi haqida sharhlar" [level=3] [ref=e2514]
+            - generic [ref=e2516]:
+              - generic [ref=e2517]:
+                - paragraph [ref=e2519]: "0.0"
+                - generic [ref=e2520]: 0 ta sharh
+              - generic [ref=e2521]:
+                - generic [ref=e2522]:
+                  - 'img "Rating: 5 out of 5 stars" [ref=e2524]':
+                    - img [ref=e2525]
+                    - img [ref=e2527]
+                    - img [ref=e2529]
+                    - img [ref=e2531]
+                    - img [ref=e2533]
+                  - generic [ref=e2538]: "0"
+                - generic [ref=e2539]:
+                  - 'img "Rating: 4 out of 5 stars" [ref=e2541]':
+                    - img [ref=e2542]
+                    - img [ref=e2544]
+                    - img [ref=e2546]
+                    - img [ref=e2548]
+                    - img [ref=e2550]
+                  - generic [ref=e2555]: "0"
+                - generic [ref=e2556]:
+                  - 'img "Rating: 3 out of 5 stars" [ref=e2558]':
+                    - img [ref=e2559]
+                    - img [ref=e2561]
+                    - img [ref=e2563]
+                    - img [ref=e2565]
+                    - img [ref=e2567]
+                  - generic [ref=e2572]: "0"
+                - generic [ref=e2573]:
+                  - 'img "Rating: 2 out of 5 stars" [ref=e2575]':
+                    - img [ref=e2576]
+                    - img [ref=e2578]
+                    - img [ref=e2580]
+                    - img [ref=e2582]
+                    - img [ref=e2584]
+                  - generic [ref=e2589]: "0"
+                - generic [ref=e2590]:
+                  - 'img "Rating: 1 out of 5 stars" [ref=e2592]':
+                    - img [ref=e2593]
+                    - img [ref=e2595]
+                    - img [ref=e2597]
+                    - img [ref=e2599]
+                    - img [ref=e2601]
+                  - generic [ref=e2606]: "0"
+    - button [ref=e2608] [cursor=pointer]:
+      - img [ref=e2610]
+    - contentinfo [ref=e2612]:
+      - generic [ref=e2614]:
+        - generic [ref=e2615]:
+          - list [ref=e2616]:
+            - listitem [ref=e2617]:
+              - link "Biz haqimizda" [ref=e2618] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/about
+                - generic [ref=e2619]: Biz haqimizda
+            - listitem [ref=e2620]:
+              - link "Qo'llab-quvvatlash" [ref=e2621] [cursor=pointer]:
+                - /url: https://t.me/BirBir_Support
+                - generic [ref=e2622]: Qo'llab-quvvatlash
+            - listitem [ref=e2623]:
+              - link "Barcha hududlar" [ref=e2624] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/regions
+                - generic [ref=e2625]: Barcha hududlar
+            - listitem [ref=e2626]:
+              - link "Platforma qoidalari" [ref=e2627] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/legal
+                - generic [ref=e2628]: Platforma qoidalari
+            - listitem [ref=e2629]:
+              - link "Blog" [ref=e2630] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/blog
+                - generic [ref=e2631]: Blog
+            - listitem [ref=e2632]:
+              - link "Xizmatlar" [ref=e2633] [cursor=pointer]:
+                - /url: https://birbir.uz/uz/monetization
+                - generic [ref=e2634]: Xizmatlar
+          - generic [ref=e2635]:
+            - list [ref=e2636]:
+              - listitem [ref=e2637]:
+                - link [ref=e2638] [cursor=pointer]:
+                  - /url: https://www.instagram.com/birbir.uz
+                  - img [ref=e2639]
+              - listitem [ref=e2641]:
+                - link [ref=e2642] [cursor=pointer]:
+                  - /url: https://t.me/birbir_uz
+                  - img [ref=e2643]
+              - listitem [ref=e2645]:
+                - link [ref=e2646] [cursor=pointer]:
+                  - /url: https://www.facebook.com/people/Bir-Bir-%D0%BE%D0%B1%D1%8A%D1%8F%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B2-%D0%A3%D0%B7%D0%B1%D0%B5%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B5/61565648775523/
+                  - img [ref=e2647]
+              - listitem [ref=e2649]:
+                - link [ref=e2650] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/company/birbir/
+                  - img [ref=e2651]
+              - listitem [ref=e2653]:
+                - link [ref=e2654] [cursor=pointer]:
+                  - /url: https://www.youtube.com/@birbir_uz
+                  - img [ref=e2655]
+            - generic [ref=e2657] [cursor=pointer]:
+              - img [ref=e2658]
+              - generic [ref=e2664]: RU
+              - img [ref=e2666]
+              - generic [ref=e2784]: UZ
+        - generic [ref=e2785]:
+          - img "QR-code для загрузки приложения" [ref=e2786]
+          - generic [ref=e2787]:
+            - paragraph [ref=e2788]: Mobil ilovani yuklab oling
+            - generic [ref=e2789]:
+              - link "Orqali yuklang App Store" [ref=e2790] [cursor=pointer]:
+                - /url: https://link.birbir.uz/seif/mhfdkd1q
+                - img "Orqali yuklang App Store" [ref=e2791]
+              - link "Orqali yuklang Google Play" [ref=e2792] [cursor=pointer]:
+                - /url: https://link.birbir.uz/seif/uhr292xr
+                - img "Orqali yuklang Google Play" [ref=e2793]
+  - textbox [ref=e1748]

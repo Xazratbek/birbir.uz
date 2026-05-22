@@ -1,0 +1,219 @@
+TZ
+
+1. Region API
+- `GET /regions/`
+- `GET /regions/{slug}/districts/`
+
+Serializerlar:
+- `RegionListSerializer`: `id`, `name`, `slug`, `type`
+- `DistrictListSerializer`: `id`, `name`, `slug`, `region`
+
+2. Listing create API
+- `POST /listings/`
+
+Request fieldlar:
+- `title`
+- `description`
+- `price`
+- `currency`
+- `category_id`
+- `latitude`
+- `longitude`
+- `address`
+- `landmark`
+- `contact_name`
+- `contact_phone`
+- `allow_chat`
+- `allow_call`
+- `allow_telegram`
+- `has_delivery`
+- `delivery_notes`
+- `is_negotiable`
+- `images[]`
+
+Backend logika:
+- auth user olinadi
+- lat/lng dan `Point` yasaladi
+- reverse geocode qilinadi
+- `region` va `district` DBdan topiladi
+- `Listing`, `ListingContact`, `ListingDelivery`, `ListingImage` yaratiladi
+- kamida 1 aloqa usuli tanlangan bo'lishi shart
+- kamida 1 rasm, ko'pi 10 rasm
+
+Serializerlar:
+- `ListingCreateSerializer`
+  - `title`
+  - `description`
+  - `price`
+  - `currency`
+  - `category_id`
+  - `latitude`
+  - `longitude`
+  - `address`
+  - `landmark`
+  - `contact_name`
+  - `contact_phone`
+  - `allow_chat`
+  - `allow_call`
+  - `allow_telegram`
+  - `has_delivery`
+  - `delivery_notes`
+  - `is_negotiable`
+  - `images`
+
+3. Listing list API
+- `GET /listings/`
+
+Query paramlar:
+- `category`
+- `region`
+- `district`
+- `search`
+- `ordering`
+- `has_delivery`
+- `promotion_type`
+- `is_negotiable`
+- `status`
+
+Serializer:
+- `ListingListSerializer`
+  - `id`
+  - `slug`
+  - `title`
+  - `price`
+  - `currency`
+  - `main_image`
+  - `region_name`
+  - `district_name`
+  - `is_negotiable`
+  - `has_delivery`
+  - `promotion_badges`
+  - `published_at`
+  - `favorite_count`
+  - `view_count`
+
+4. Listing detail API
+- `GET /listings/{id or slug}/`
+
+Serializer:
+- `ListingDetailSerializer`
+  - `id`
+  - `slug`
+  - `title`
+  - `description`
+  - `price`
+  - `currency`
+  - `category`
+  - `condition`
+  - `region`
+  - `district`
+  - `address`
+  - `landmark`
+  - `location_point`
+  - `images`
+  - `view_count`
+  - `favorite_count`
+  - `report_count`
+  - `is_negotiable`
+  - `published_at`
+  - `expires_at`
+  - `seller`
+  - `contact`
+  - `delivery`
+  - `promotions`
+  - `is_favorited`
+
+Nested serializerlar:
+- `SellerShortSerializer`
+  - `id`
+  - `display_name`
+  - `avatar`
+  - `is_verified`
+  - `is_store`
+  - `active_listing_count`
+- `ListingContactSerializer`
+  - `contact_name`
+  - `phone_number`
+  - `allow_chat`
+  - `allow_call`
+  - `allow_telegram`
+- `ListingDeliverySerializer`
+  - `has_delivery`
+  - `delivery_notes`
+- `ListingImageSerializer`
+  - `id`
+  - `image`
+  - `sort_order`
+  - `is_main`
+- `ListingPromotionSerializer`
+  - `id`
+  - `promotion_type`
+  - `starts_at`
+  - `ends_at`
+  - `is_active`
+
+5. Seller profile API
+- `GET /sellers/{user_id}/`
+- `PATCH /seller-profile/me/`
+
+Serializer:
+- `SellerProfileSerializer`
+  - `user_id`
+  - `display_name`
+  - `avatar`
+  - `bio`
+  - `is_verified`
+  - `is_store`
+  - `telegram_username`
+  - `phone_visible`
+  - `reply_time_minutes`
+  - `active_listing_count`
+  - `followers_count`
+
+6. Seller follow API
+- `POST /sellers/{id}/follow/`
+- `DELETE /sellers/{id}/follow/`
+
+Response:
+- `seller_id`
+- `is_following`
+- `followers_count`
+
+7. Listing report API
+- `POST /listings/{id}/report/`
+- `GET /my/reports/` admin/moderation uchun keyin
+
+Serializer:
+- `ListingReportCreateSerializer`
+  - `reason`
+  - `comment`
+
+8. Promotion API
+- `GET /promotion-types/`
+- `POST /listings/{id}/promotions/`
+- `GET /listings/{id}/promotions/`
+
+Serializer:
+- `ListingPromotionSerializer`
+  - `id`
+  - `promotion_type`
+  - `starts_at`
+  - `ends_at`
+  - `is_active`
+
+9. Favorite API
+- `POST /listings/{id}/favorite/`
+- `DELETE /listings/{id}/favorite/`
+- `GET /favorites/`
+
+Serializer:
+- `FavoriteListSerializer`
+  - `id`
+  - `listing`
+
+10. User verify API
+- `POST /users/me/verify/complete/`
+
+Logika:
+- MyID tasdiq muvaffaqiyatli bo'lsa `user.is_verified = True`
+- `verified user` badge seller serializerlarda qaytadi
