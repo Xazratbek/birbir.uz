@@ -3,6 +3,7 @@ from utils.models import BaseModel
 from categories.models import Category
 from accounts.models import User
 from django.db import models
+from django.utils.text import slugify
 
 class ConditionChoice(models.TextChoices):
     NEW = "new", "Yangi"
@@ -39,12 +40,25 @@ class PromotionTypeChoice(models.TextChoices):
 
 class Region(BaseModel):
     name = models.CharField(max_length=120, unique=True, db_index=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True,null=True,blank=True)
     type = models.CharField(max_length=20, choices=RegionTypeChoice.choices, default=RegionTypeChoice.CITY)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+
+            counter = 1
+            while self.__class__.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = "regions"
@@ -55,11 +69,24 @@ class Region(BaseModel):
 class District(BaseModel):
     region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name="districts")
     name = models.CharField(max_length=120, db_index=True)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True,blank=True,null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.region.name} | {self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+
+            counter = 1
+            while self.__class__.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = "districts"
@@ -81,8 +108,8 @@ class Listing(BaseModel):
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     condition = models.CharField(max_length=10, choices=ConditionChoice.choices, default=ConditionChoice.NEW)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=15, decimal_places=12, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=15, decimal_places=12, null=True, blank=True)
     address = models.CharField(max_length=255, blank=True)
     landmark = models.CharField(max_length=255, blank=True)
     contact_name = models.CharField(max_length=120, blank=True)
@@ -99,6 +126,18 @@ class Listing(BaseModel):
     def get_absolute_url(self):
         return reverse("listing:detail", kwargs={"uuid": self.id})
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+
+            counter = 1
+            while self.__class__.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = "listings"

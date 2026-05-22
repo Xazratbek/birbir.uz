@@ -2,11 +2,15 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .serializers import DistrictListSerializer, ListingListSerializer, ListingDetailSerializer, ListingCreateSerializer, RegionListSerializer
-from .models import District, Listing, Region
+from .models import District, Listing, Region, RegionTypeChoice, ListingView
 from .pagination import ListingPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import transaction
+from .models import Listing, ListingContact, ListingImage, Region, District
+from categories.models import Category
+from .utils import get_location_details
 
 class ListingListAPIView(ListAPIView):
     serializer_class = ListingListSerializer
@@ -19,20 +23,71 @@ class ListingDetailView(RetrieveAPIView):
     lookup_url_kwarg = 'uuid'
 
     def get_queryset(self):
-        return Listing.objects.all()
+        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).first()
+        if self.request.user.is_authenticated:
+            ListingView.objects.create(listing=listing,user=self.request.user,session_key=None)
+        else:
+            if not self.request.session.session_key:
+                self.request.session.create()
+            session_key = self.request.session.session_key
+            ListingView.objects.create(listing=listing,user=None,session_key=session_key)
+
+        return listing
+
 
 class ListingCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = ListingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        # elon = serializer.save(user=request.user)
+        images = serializer.validated_data.pop('images','')
+        allow_chat = serializer.validated_data.pop('allow_chat')
+        allow_call = serializer.validated_data.pop('allow_call')
+        allow_telegram = serializer.validated_data.pop('allow_telegram')
+        category_id = serializer.validated_data.pop('category_id')
+        latitude = serializer.validated_data.pop('latitude')
+        longitude = serializer.validated_data.pop('longitude')
+        address = serializer.validated_data.pop('address')
+
+        with transaction.atomic():
+            lakatsiya = get_location_details(lat=latitude,lon=longitude)
+            print(lakatsiya)
+            if lakatsiya.get('district') is None:
+                region, created = Region.objects.get_or_create(name=lakatsiya.get('region'),type=RegionTypeChoice.CITY)
+
+            elif lakatsiya.get('region') is None:
+                region, created = Region.objects.get_or_create(name=lakatsiya.get('district'))
+
+            if lakatsiya.get('district') is not None:
+                district, created = District.objects.get_or_create(
+                    name=lakatsiya.get('district'),
+                    region=region,
+                )
+            else:
+                district, created = District.objects.get_or_create(
+                    name=lakatsiya.get('city'),
+                    region=region,
+                )
+
+            category = get_object_or_404(Category,pk=category_id)
+            elon = Listing.objects.create(user=request.user,listing_category=category,region=region,district=district,address=address if address else lakatsiya.get('full_address'),**serializer.validated_data)
+
+            rasmlar = []
+            for i,image in enumerate(images):
+                if i == 0:
+                    rasmlar.append(ListingImage(listing=elon,image=image,is_main=True,sort_order=0))
+                rasmlar.append(ListingImage(listing=elon,image=image,is_main=False,sort_order=0))
+
+            ListingImage.objects.bulk_create(rasmlar)
+            ListingContact.objects.create(listing=elon,phone_number=elon.contact_phone,contact_name=elon.contact_name,allow_chat=allow_chat,allow_call=allow_call,allow_telegram=allow_telegram)
+
+
         return Response({
             "status":status.HTTP_201_CREATED,
-            "message":"Yangi e'lon qo'shildi"
-        })
-    
+            "message":  "E'lon qo'shildi",
+            "elon": ListingListSerializer(elon).data
+        },status=status.HTTP_201_CREATED)
+
 
 class RegionsListAPIView(ListAPIView):
     serializer_class = RegionListSerializer

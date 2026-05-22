@@ -81,6 +81,7 @@ class RegionAdmin(admin.ModelAdmin):
     search_fields = ("name", "slug")
     ordering = ("name",)
     list_filter = ("type", "is_active", "created_at")
+    prepopulated_fields = {"slug":('name',)}
 
 
 @admin.register(District)
@@ -89,6 +90,7 @@ class DistrictAdmin(admin.ModelAdmin):
     search_fields = ("name", "slug", "region__name")
     ordering = ("region__name", "name")
     list_filter = ("region", "is_active", "created_at")
+    prepopulated_fields = {"slug":('name',)}
 
 
 @admin.register(ListingContact)

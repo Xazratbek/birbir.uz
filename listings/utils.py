@@ -1,44 +1,76 @@
-from geopy.geocoders import Nominatim
+import requests
+
 
 def get_location_details(lat: float, lon: float) -> dict:
     """
-    Koordinatalarga qarab viloyat (region) va tumanni (district) aniqlash funksiyasi.
+    Koordinatadan viloyat va tumanni aniqlash
     """
-    # Geolocator obyektini yaratamiz
-    geolocator = Nominatim(user_agent="uzb_geo_resolver")
 
-    # Standart qaytadigan javob strukturasi
+    url = "https://nominatim.openstreetmap.org/reverse"
+
+    params = {
+        "lat": lat,
+        "lon": lon,
+        "format": "jsonv2",
+        "accept-language": "uz"
+    }
+
+    headers = {
+        "User-Agent": "geo-resolver-app"
+    }
+
     result = {
-        "region": "Topilmadi",
-        "district": "Topilmadi",
-        "full_address": "Topilmadi"
+        "region": None,
+        "district": None,
+        "city": None,
+        "full_address": None
     }
 
     try:
-        # Koordinatani tekshiramiz
-        location = geolocator.reverse(f"{lat}, {lon}", timeout=10)
+        response = requests.get(
+            url,
+            params=params,
+            headers=headers,
+            timeout=15
+        )
 
-        if location and location.raw:
-            address = location.raw.get('address', {})
+        response.raise_for_status()
 
-            # To'liq manzilni saqlaymiz
-            result["full_address"] = location.address
+        data = response.json()
 
-            # Viloyatni aniqlash ('state' yoki 'region')
-            result["region"] = address.get('state') or address.get('region') or "Topilmadi"
+        address = data.get("address", {})
 
-            # Tumanni aniqlash ('county', 'suburb' yoki 'district')
-            result["district"] = address.get('county') or address.get('suburb') or address.get('district') or "Topilmadi"
+        result["full_address"] = data.get("display_name")
 
-    except Exception as e:
-        print(f"Xatolik yuz berdi: {e}")
+        result["region"] = (
+            address.get("state")
+            or address.get("province")
+            or address.get("region")
+        )
 
-    return result
+        result["district"] = (
+            address.get("county")
+            or address.get("city_district")
+            or address.get("district")
+            or address.get("municipality")
+        )
 
-# --- Funksiyani tekshirib ko'rish ---
-# Misol: Samarqand shahri atrofidagi koordinata
-lat_input = 39.6542
-lon_input = 66.9597
+        result["city"] = (
+            address.get("city")
+            or address.get("town")
+            or address.get("village")
+        )
 
-location_data = get_location_details(lat_input, lon_input)
-print(location_data)
+        return result
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "error": str(e)
+        }
+
+
+# # TEST
+# lat = 39.6542
+# lon = 66.9597
+
+# print(get_location_details(lat, lon))
