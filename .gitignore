@@ -20,6 +20,8 @@ staticfiles/
 .env.*
 !.env.example
 
+.playwright-mcp
+
 # Test and tooling caches
 .pytest_cache/
 .mypy_cache/
@@ -48,3 +50,4 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+.sixth/
