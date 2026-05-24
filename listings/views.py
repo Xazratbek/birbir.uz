@@ -1,97 +1,192 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
+from django.db import transaction
+from django.db.models import Count
+from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .serializers import DistrictListSerializer, ListingListSerializer, ListingDetailSerializer, ListingCreateSerializer, RegionListSerializer
-from .models import District, Listing, Region, RegionTypeChoice, ListingView
-from .pagination import ListingPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction
-from .models import Listing, ListingContact, ListingImage, Region, District
+from rest_framework.views import APIView
+
 from categories.models import Category
+from .models import (
+    CategoryAttribute,
+    CategoryAttributeOption,
+    District,
+    Listing,
+    ListingAttributeValue,
+    ListingContact,
+    ListingImage,
+    ListingView,
+    Region,
+    RegionTypeChoice,
+)
+from .pagination import ListingPagination
+from .serializers import (
+    DistrictListSerializer,
+    ListingCreateSerializer,
+    ListingDetailSerializer,
+    ListingImageSerializer,
+    ListingListSerializer,
+    RegionListSerializer,
+)
+from .tasks import oddy_task, singleton_task
 from .utils import get_location_details
-from django.db.models import Prefetch, F, Count
-from .tasks import singleton_task, oddy_task
+
 
 class ListingListAPIView(ListAPIView):
     serializer_class = ListingListSerializer
-    queryset = Listing.objects.all().order_by('-created_at').prefetch_related('images')
+    queryset = Listing.objects.all().order_by("-created_at").prefetch_related("images")
     pagination_class = ListingPagination
 
     def get_queryset(self):
         oddy_task.delay()
         return super().get_queryset()
 
+
 class ListingDetailView(RetrieveAPIView):
     serializer_class = ListingDetailSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'uuid'
+    lookup_field = "id"
+    lookup_url_kwarg = "uuid"
+
+    def get_queryset(self):
+        return (
+            Listing.objects.select_related("region", "district", "listing_category", "user", "contact")
+            .prefetch_related("images", "views", "attribute_values__attribute", "attribute_values__option", "attribute_values__attribute__options")
+            .annotate(total_views=Count("views"))
+        )
 
     def get_object(self):
-        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).select_related('region','district','listing_category').prefetch_related('images','views').annotate(total_views=Count('views')).first()
+        listing = super().get_object()
         singleton_task.delay(str(listing.id))
+
         if self.request.user.is_authenticated:
-            ListingView.objects.get_or_create(listing=listing,user=self.request.user,session_key=None)
+            ListingView.objects.get_or_create(listing=listing, user=self.request.user, session_key=None)
         else:
             if not self.request.session.session_key:
                 self.request.session.create()
             session_key = self.request.session.session_key
-            ListingView.objects.get_or_create(listing=listing,user=None,session_key=session_key)
+            ListingView.objects.get_or_create(listing=listing, user=None, session_key=session_key)
+
         return listing
+
 
 class ListingCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         serializer = ListingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        images = serializer.validated_data.pop('images','')
-        allow_chat = serializer.validated_data.pop('allow_chat')
-        allow_call = serializer.validated_data.pop('allow_call')
-        allow_telegram = serializer.validated_data.pop('allow_telegram')
-        category_id = serializer.validated_data.pop('category_id')
-        latitude = serializer.validated_data.pop('latitude')
-        longitude = serializer.validated_data.pop('longitude')
-        address = serializer.validated_data.pop('address')
+
+        images = serializer.validated_data.pop("images")
+        attributes = serializer.validated_data.pop("attributes", [])
+        allow_chat = serializer.validated_data.pop("allow_chat")
+        allow_call = serializer.validated_data.pop("allow_call")
+        allow_telegram = serializer.validated_data.pop("allow_telegram")
+        category_id = serializer.validated_data.pop("category_id")
+        latitude = serializer.validated_data.pop("latitude")
+        longitude = serializer.validated_data.pop("longitude")
+        address = serializer.validated_data.pop("address", "")
+        landmark = serializer.validated_data.pop("landmark", "")
 
         with transaction.atomic():
-            lakatsiya = get_location_details(lat=latitude,lon=longitude)
-            print(lakatsiya)
-            if lakatsiya.get('district') is None:
-                region, created = Region.objects.get_or_create(name=lakatsiya.get('region'),type=RegionTypeChoice.CITY)
+            location = get_location_details(lat=latitude, lon=longitude)
 
-            elif lakatsiya.get('region') is None:
-                region, created = Region.objects.get_or_create(name=lakatsiya.get('district'))
+            region_name = location.get("region")
+            district_name = location.get("district") or location.get("city")
 
-            if lakatsiya.get('district') is not None:
-                district, created = District.objects.get_or_create(
-                    name=lakatsiya.get('district'),
-                    region=region,
-                )
-            else:
-                district, created = District.objects.get_or_create(
-                    name=lakatsiya.get('city'),
-                    region=region,
+            region = None
+            district = None
+
+            if region_name:
+                region, _ = Region.objects.get_or_create(
+                    name=region_name,
+                    defaults={"type": RegionTypeChoice.CITY},
                 )
 
-            category = get_object_or_404(Category,pk=category_id)
-            elon = Listing.objects.create(user=request.user,listing_category=category,region=region,district=district,address=address if address else lakatsiya.get('full_address'),**serializer.validated_data)
+            if district_name:
+                if region is None:
+                    region, _ = Region.objects.get_or_create(
+                        name=district_name,
+                        defaults={"type": RegionTypeChoice.CITY},
+                    )
+                district, _ = District.objects.get_or_create(
+                    name=district_name,
+                    region=region,
+                )
 
-            rasmlar = []
-            for i,image in enumerate(images):
-                if i == 0:
-                    rasmlar.append(ListingImage(listing=elon,image=image,is_main=True,sort_order=0))
-                rasmlar.append(ListingImage(listing=elon,image=image,is_main=False,sort_order=0))
+            category = get_object_or_404(Category, pk=category_id)
 
-            ListingImage.objects.bulk_create(rasmlar)
-            ListingContact.objects.create(listing=elon,phone_number=elon.contact_phone,contact_name=elon.contact_name,allow_chat=allow_chat,allow_call=allow_call,allow_telegram=allow_telegram)
+            elon = Listing.objects.create(
+                user=request.user,
+                listing_category=category,
+                region=region,
+                district=district,
+                address=address or location.get("full_address", ""),
+                landmark=landmark,
+                **serializer.validated_data,
+            )
 
+            listing_images = []
+            for index, image in enumerate(images):
+                listing_images.append(
+                    ListingImage(
+                        listing=elon,
+                        image=image,
+                        is_main=index == 0,
+                        sort_order=index,
+                    )
+                )
+            ListingImage.objects.bulk_create(listing_images)
 
-        return Response({
-            "status":status.HTTP_201_CREATED,
-            "message":  "E'lon qo'shildi",
-            "elon": ListingListSerializer(elon).data
-        },status=status.HTTP_201_CREATED)
+            ListingContact.objects.create(
+                listing=elon,
+                phone_number=serializer.validated_data.get("contact_phone", ""),
+                contact_name=serializer.validated_data.get("contact_name", ""),
+                allow_chat=allow_chat,
+                allow_call=allow_call,
+                allow_telegram=allow_telegram,
+            )
+
+            attribute_map = {str(attr.id): attr for attr in category.attributes.filter(is_active=True).prefetch_related("options")}
+            listing_attribute_values = []
+
+            for item in attributes:
+                attribute = attribute_map.get(str(item["attribute_id"]))
+                if attribute is None:
+                    continue
+
+                option = None
+                if item.get("option_id"):
+                    option = attribute.options.filter(id=item["option_id"], is_active=True).first()
+
+                listing_attribute_values.append(
+                    ListingAttributeValue(
+                        listing=elon,
+                        attribute=attribute,
+                        option=option,
+                        value_text=item.get("value_text") or "",
+                        value_int=item.get("value_int"),
+                        value_decimal=item.get("value_decimal"),
+                        value_bool=item.get("value_bool"),
+                    )
+                )
+
+            ListingAttributeValue.objects.bulk_create(listing_attribute_values)
+
+        elon = (
+            Listing.objects.select_related("listing_category", "region", "district", "contact", "user")
+            .prefetch_related("images", "attribute_values__attribute", "attribute_values__option")
+            .get(id=elon.id)
+        )
+
+        return Response(
+            {
+                "status": status.HTTP_201_CREATED,
+                "message": "E'lon qo'shildi",
+                "elon": ListingDetailSerializer(elon).data,
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class RegionsListAPIView(ListAPIView):
@@ -103,8 +198,5 @@ class DistrictsListAPIView(ListAPIView):
     serializer_class = DistrictListSerializer
 
     def get_queryset(self):
-        slug = self.kwargs.get('slug')
-
-        return District.objects.filter(
-            region__slug=slug
-        )
+        slug = self.kwargs.get("slug")
+        return District.objects.filter(region__slug=slug)

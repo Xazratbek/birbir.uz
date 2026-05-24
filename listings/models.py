@@ -38,6 +38,88 @@ class PromotionTypeChoice(models.TextChoices):
     HIGHLIGHT = "highlight", "Ajratilgan"
 
 
+class AttributeValueTypeChoice(models.TextChoices):
+    TEXT = "text", "Matn"
+    INTEGER = "integer", "Butun son"
+    DECIMAL = "decimal", "Kasr son"
+    BOOLEAN = "boolean", "Ha/Yo'q"
+    SELECT = "select", "Tanlov"
+
+
+class CategoryAttribute(BaseModel):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="attributes")
+    key = models.SlugField(max_length=120)
+    label = models.CharField(max_length=150)
+    value_type = models.CharField(max_length=20, choices=AttributeValueTypeChoice.choices)
+    is_required = models.BooleanField(default=False)
+    is_filterable = models.BooleanField(default=False)
+    is_searchable = models.BooleanField(default=False)
+    unit = models.CharField(max_length=30, blank=True, default="")
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.category.name} | {self.label}"
+
+    class Meta:
+        db_table = "category_attributes"
+        verbose_name = "Kategoriya atributi"
+        verbose_name_plural = "Kategoriya atributlari"
+        constraints = [
+            models.UniqueConstraint(fields=["category", "key"], name="unique_category_attribute_key"),
+        ]
+        indexes = [
+            models.Index(fields=["category", "is_active", "sort_order"], name="cat_attr_active_sort_idx"),
+            models.Index(fields=["category", "is_required"], name="cat_attr_required_idx"),
+        ]
+
+
+class CategoryAttributeOption(BaseModel):
+    attribute = models.ForeignKey(CategoryAttribute, on_delete=models.CASCADE, related_name="options")
+    value = models.SlugField(max_length=120)
+    label = models.CharField(max_length=150)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.attribute.label} | {self.label}"
+
+    class Meta:
+        db_table = "category_attribute_options"
+        verbose_name = "Kategoriya atributi varianti"
+        verbose_name_plural = "Kategoriya atributi variantlari"
+        constraints = [
+            models.UniqueConstraint(fields=["attribute", "value"], name="unique_attribute_option_value"),
+        ]
+        indexes = [
+            models.Index(fields=["attribute", "is_active", "sort_order"], name="attr_option_active_sort_idx"),
+        ]
+
+
+class ListingAttributeValue(BaseModel):
+    listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="attribute_values")
+    attribute = models.ForeignKey(CategoryAttribute, on_delete=models.CASCADE, related_name="listing_values")
+    option = models.ForeignKey(CategoryAttributeOption, on_delete=models.SET_NULL, null=True, blank=True, related_name="listing_values")
+    value_text = models.CharField(max_length=255, blank=True, default="")
+    value_int = models.BigIntegerField(null=True, blank=True)
+    value_decimal = models.DecimalField(max_digits=18, decimal_places=6, null=True, blank=True)
+    value_bool = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.listing.title} | {self.attribute.label}"
+
+    class Meta:
+        db_table = "listing_attribute_values"
+        verbose_name = "E'lon atribut qiymati"
+        verbose_name_plural = "E'lon atribut qiymatlari"
+        constraints = [
+            models.UniqueConstraint(fields=["listing", "attribute"], name="unique_listing_attribute_value"),
+        ]
+        indexes = [
+            models.Index(fields=["listing", "attribute"], name="listing_attr_value_idx"),
+        ]
+
+
 class Region(BaseModel):
     name = models.CharField(max_length=120, unique=True, db_index=True)
     slug = models.SlugField(unique=True,null=True,blank=True)
