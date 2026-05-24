@@ -1,5 +1,7 @@
 from django.contrib import admin
-from accounts.models import SellerFollow, SellerProfile, User
+
+from accounts.models import SellerApplication, SellerFollow, SellerProfile, User
+
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -33,6 +35,14 @@ class SellerProfileAdmin(admin.ModelAdmin):
     search_fields = ("display_name", "user__username", "user__email", "telegram_username")
     ordering = ("-created_at",)
     list_filter = ("is_store", "phone_visible", "created_at")
+
+
+@admin.register(SellerApplication)
+class SellerApplicationAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "business_name", "status", "reviewed_by", "reviewed_at", "created_at")
+    search_fields = ("user__username", "user__email", "business_name", "contact_phone")
+    list_filter = ("status", "is_store", "created_at")
+    ordering = ("-created_at",)
 
 
 @admin.register(SellerFollow)
