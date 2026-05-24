@@ -11,29 +11,34 @@ from django.db import transaction
 from .models import Listing, ListingContact, ListingImage, Region, District
 from categories.models import Category
 from .utils import get_location_details
+from django.db.models import Prefetch, F, Count
+from .tasks import singleton_task, oddy_task
 
 class ListingListAPIView(ListAPIView):
     serializer_class = ListingListSerializer
-    queryset = Listing.objects.all().order_by('-created_at')
+    queryset = Listing.objects.all().order_by('-created_at').prefetch_related('images')
     pagination_class = ListingPagination
+
+    def get_queryset(self):
+        oddy_task.delay()
+        return super().get_queryset()
 
 class ListingDetailView(RetrieveAPIView):
     serializer_class = ListingDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'uuid'
 
-    def get_queryset(self):
-        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).first()
+    def get_object(self):
+        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).select_related('region','district','listing_category').prefetch_related('images','views').first()
+        singleton_task.delay(listing.id)
         if self.request.user.is_authenticated:
-            ListingView.objects.create(listing=listing,user=self.request.user,session_key=None)
+            ListingView.objects.get_or_create(listing=listing,user=self.request.user,session_key=None)
         else:
             if not self.request.session.session_key:
                 self.request.session.create()
             session_key = self.request.session.session_key
-            ListingView.objects.create(listing=listing,user=None,session_key=session_key)
-
+            ListingView.objects.get_or_create(listing=listing,user=None,session_key=session_key)
         return listing
-
 
 class ListingCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]

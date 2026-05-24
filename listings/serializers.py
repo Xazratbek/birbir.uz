@@ -15,7 +15,7 @@ class DistrictListSerializer(serializers.ModelSerializer):
     region = RegionListSerializer()
     class Meta:
         model = District
-        fields = ['id', 'name', 'slug', 'type','region']
+        fields = ['id', 'name', 'slug', 'is_active','region']
 
 class ListingImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,16 +39,18 @@ class ListingDetailSerializer(serializers.ModelSerializer):
     condition = serializers.CharField(source='get_condition_display', read_only=True)
     currency = serializers.CharField(source='get_currency_display',read_only=True)
     status = serializers.CharField(source='get_status_display',read_only=True)
-    views = serializers.SerializerMethodField()
+    total_views = serializers.SerializerMethodField()
     region = RegionListSerializer()
     district = DistrictListSerializer()
 
-    def get_view_count(self, obj):
-        return obj.views.count()
+    # def get_total_views(self, obj):
+    #     return obj.total_views
 
+    def get_total_views(self, obj):
+        return obj.views.count()
     class Meta:
         model = Listing
-        fields = ['id','title','description','price','currency','listing_category','user','condition','latitude','longitude','status','views','address','has_delivery','contact_name','contact_phone','is_negotiable','published_at','expires_at','region','district','images']
+        fields = ['id','title','description','price','currency','listing_category','user','condition','latitude','longitude','status','total_views','address','has_delivery','contact_name','contact_phone','is_negotiable','published_at','expires_at','region','district','images']
 
 class ListingCreateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=150)

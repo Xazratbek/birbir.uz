@@ -7,4 +7,4 @@ from .models import Category
 
 class CategoryListAPIView(ListAPIView):
     serializer_class = CategorySerializer
-    queryset = Category.objects.filter(parent__isnull=True)
+    queryset = Category.objects.all().prefetch_related('categories')

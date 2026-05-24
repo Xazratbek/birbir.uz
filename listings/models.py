@@ -155,7 +155,7 @@ class Listing(BaseModel):
 class ListingView(BaseModel):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="views")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listing_views", null=True, blank=True)
-    session_key = models.CharField(max_length=64, blank=True)
+    session_key = models.CharField(max_length=64, blank=True,null=True)
 
     def __str__(self):
         return f"{self.listing.title} view"
@@ -169,6 +169,7 @@ class ListingView(BaseModel):
             models.Index(fields=["user", "created_at"], name="lview_user_created_idx"),
             models.Index(fields=["session_key", "created_at"], name="lview_session_created_idx"),
         ]
+        unique_together = ['listing','user']
 
 class ListingImage(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE,related_name="images")
