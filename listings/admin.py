@@ -1,7 +1,10 @@
 from django.contrib import admin
 from listings.models import (
+    CategoryAttribute,
+    CategoryAttributeOption,
     District,
     Listing,
+    ListingAttributeValue,
     ListingContact,
     ListingImage,
     ListingPromotion,
@@ -147,3 +150,49 @@ class ListingViewAdmin(admin.ModelAdmin):
     search_fields = ("listing__title", "user__username", "session_key")
     ordering = ("-created_at",)
     list_filter = ("created_at",)
+
+
+@admin.register(CategoryAttribute)
+class CategoryAttributeAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "category",
+        "key",
+        "label",
+        "value_type",
+        "is_required",
+        "is_filterable",
+        "is_searchable",
+        "is_active",
+        "sort_order",
+        "created_at",
+    )
+    search_fields = ("category__name", "key", "label")
+    ordering = ("category__name", "sort_order", "label")
+    list_filter = ("value_type", "is_required", "is_filterable", "is_searchable", "is_active", "created_at")
+
+
+@admin.register(CategoryAttributeOption)
+class CategoryAttributeOptionAdmin(admin.ModelAdmin):
+    list_display = ("id", "attribute", "value", "label", "sort_order", "is_active", "created_at")
+    search_fields = ("attribute__label", "attribute__category__name", "value", "label")
+    ordering = ("attribute__category__name", "attribute__label", "sort_order")
+    list_filter = ("is_active", "created_at")
+
+
+@admin.register(ListingAttributeValue)
+class ListingAttributeValueAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "listing",
+        "attribute",
+        "option",
+        "value_text",
+        "value_int",
+        "value_decimal",
+        "value_bool",
+        "created_at",
+    )
+    search_fields = ("listing__title", "attribute__label", "option__label", "value_text")
+    ordering = ("-created_at",)
+    list_filter = ("attribute__category", "attribute", "created_at")
