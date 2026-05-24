@@ -9,15 +9,7 @@ from rest_framework.views import APIView
 from authentication.serializers import ProfileSerializer
 from .models import SellerApplication, SellerApplicationStatus, SellerFollow, SellerProfile, User
 from .permissions import IsProfileOwner, IsSellerProfileOwner
-from .serializers import (
-    SellerApplicationCreateSerializer,
-    SellerApplicationReviewSerializer,
-    SellerApplicationSerializer,
-    SellerFollowSerializer,
-    SellerProfileSerializer,
-    UserSerializer,
-)
-
+from .serializers import *
 
 class ProfileUpdateView(RetrieveUpdateAPIView):
     permission_classes = [IsProfileOwner]

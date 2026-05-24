@@ -42,7 +42,7 @@ class StartSignupView(APIView):
         if email:
             send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [email], fail_silently=False)
         else:
-            send_sms(phone_number, f"Tasdiqlash kodi: {otp}")
+            send_sms(phone_number)
 
         return Response({"status":status.HTTP_200_OK,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi yuborildi"}, status=status.HTTP_201_CREATED)
 
@@ -66,7 +66,7 @@ class ResendCodeView(APIView):
                 if session.user.email:
                     send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [session.user.email], fail_silently=False)
                 else:
-                    send_sms(session.user.phone_number, f"Tasdiqlash kodi: {otp}")
+                    send_sms(session.user.phone_number)
 
                 return Response({"status":status.HTTP_201_CREATED,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi qayta yuborildi"}, status=status.HTTP_201_CREATED)
 
