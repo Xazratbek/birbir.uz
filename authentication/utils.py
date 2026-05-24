@@ -19,17 +19,33 @@ def generate_otp():
     return str(random.randint(100000, 999999))
 
 
+def _get_gateway_headers():
+    return {
+        "Authorization": f"Bearer {settings.TELEGRAM_GATEWAY_TOKEN}",
+        "Content-Type": "application/json",
+    }
+
+
 def send_sms(phone_number: str):
-    header = {
-        "Authorization":"Bearer AAGnJAAA7qUMTqvgYu23eROzo_5tGZq_dt-YfNLtDTD9Tg",
-        "Content-Type":"application/json"
-              }
     data = {
         "phone_number": f"{phone_number}",
-        "request_id": "166917350520803",
         "code_length": 6,
-        "ttl": 300
-        }
+        "ttl": 300,
+    }
     url = "https://gatewayapi.telegram.org/sendVerificationMessage"
-    res = requests.post(url=url,data=data,headers=header)
+    res = requests.post(url=url, json=data, headers=_get_gateway_headers(), timeout=10)
+    res.raise_for_status()
     return res.json()
+
+
+def verify_sms_code(request_id: str, code: str):
+    data = {
+        "request_id": request_id,
+        "code": code,
+    }
+    url = "https://gatewayapi.telegram.org/checkVerificationStatus"
+    res = requests.post(url=url, json=data, headers=_get_gateway_headers(), timeout=10)
+    res.raise_for_status()
+    payload = res.json()
+    status_data = payload.get("verification_status") or {}
+    return status_data.get("status") == "code_valid"

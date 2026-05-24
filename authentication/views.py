@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import AuthType, User
 from authentication.models import OTPCode, Purpose, RegistrationSession, Step
 from authentication.serializers import *
-from authentication.utils import generate_otp, generate_password, generate_username, send_sms
+from authentication.utils import generate_otp, generate_password, generate_username, send_sms, verify_sms_code
 
 class StartSignupView(APIView):
     permission_classes = [AllowAny]
@@ -20,7 +20,7 @@ class StartSignupView(APIView):
         email = serializer.validated_data.get("email")
         phone_number = serializer.validated_data.get("phone_number")
         print(email,phone_number)
-        otp = generate_otp()
+        otp = generate_otp() if email else None
 
         with transaction.atomic():
             user = User.objects.create_user(
@@ -31,18 +31,27 @@ class StartSignupView(APIView):
                 auth_type=AuthType.EMAIL if email else AuthType.PHONE,
             )
             session = RegistrationSession.objects.create(user=user, current_step=Step.VERIFY)
-            OTPCode.objects.create(
-                email=email,
-                phone_number=phone_number,
-                code=otp,
-                purpose=Purpose.REGISTER,
-                expires_at=OTPCode.get_expiry(),
-            )
+            if email:
+                OTPCode.objects.create(
+                    email=email,
+                    phone_number=phone_number,
+                    code=otp,
+                    purpose=Purpose.REGISTER,
+                    expires_at=OTPCode.get_expiry(),
+                )
+            else:
+                send_result = send_sms(phone_number)
+                OTPCode.objects.create(
+                    email=None,
+                    phone_number=phone_number,
+                    code=send_result.get("request_id", ""),
+                    purpose=Purpose.REGISTER,
+                    expires_at=OTPCode.get_expiry(),
+                )
 
         if email:
             send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [email], fail_silently=False)
-        else:
-            send_sms(phone_number)
+        
 
         return Response({"status":status.HTTP_200_OK,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi yuborildi"}, status=status.HTTP_201_CREATED)
 
@@ -55,18 +64,25 @@ class ResendCodeView(APIView):
             if session and not (session.user.is_phone_verified or session.user.is_email_verified) and session.current_step == Step.VERIFY:
                 email = session.user.email
                 phone_number = session.user.phone_number
-                otp = generate_otp()
-                OTPCode.objects.create(
-                                email=email if email else None,
-                                phone_number=phone_number if phone_number else None,
-                                code=otp,
-                                purpose=Purpose.REGISTER,
-                                expires_at=OTPCode.get_expiry(),
-                            )
                 if session.user.email:
+                    otp = generate_otp()
+                    OTPCode.objects.create(
+                        email=email,
+                        phone_number=None,
+                        code=otp,
+                        purpose=Purpose.REGISTER,
+                        expires_at=OTPCode.get_expiry(),
+                    )
                     send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [session.user.email], fail_silently=False)
                 else:
-                    send_sms(session.user.phone_number)
+                    send_result = send_sms(session.user.phone_number)
+                    OTPCode.objects.create(
+                        email=None,
+                        phone_number=phone_number,
+                        code=send_result.get("request_id", ""),
+                        purpose=Purpose.REGISTER,
+                        expires_at=OTPCode.get_expiry(),
+                    )
 
                 return Response({"status":status.HTTP_201_CREATED,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi qayta yuborildi"}, status=status.HTTP_201_CREATED)
 
@@ -95,7 +111,15 @@ class VerifySignupOTPView(APIView):
             phone_number=user.phone_number if user.phone_number else None,
         ).order_by("-created_at").first()
 
-        if not otp or otp.is_expired() or otp.code != serializer.validated_data["code"]:
+        if not otp or otp.is_expired():
+            return Response({"status":status.HTTP_400_BAD_REQUEST,"detail": "Kod noto'g'ri yoki eskirgan"}, status=400)
+
+        if user.email:
+            is_valid = otp.code == serializer.validated_data["code"]
+        else:
+            is_valid = verify_sms_code(request_id=otp.code, code=serializer.validated_data["code"])
+
+        if not is_valid:
             return Response({"status":status.HTTP_400_BAD_REQUEST,"detail": "Kod noto'g'ri yoki eskirgan"}, status=400)
 
         otp.is_used = True

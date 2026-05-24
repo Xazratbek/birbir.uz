@@ -1,10 +1,12 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
+from unittest.mock import patch
 
 from accounts.models import User
 
 
 class StartSignupViewTests(APITestCase):
+    @patch("authentication.views.send_sms", return_value={"request_id": "req_test_1"})
     def test_phone_signup_does_not_store_empty_email(self):
         url = "/api/auth/signup/start/"
 
