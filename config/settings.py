@@ -162,6 +162,9 @@ EMAIL_HOST_USER =  env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =  env("EMAIL_HOST_PASSWORD")
 EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
 
+SMS_PROVIDER = env("SMS_PROVIDER", default="console")
+TEXTBELT_API_KEY = env("TEXTBELT_API_KEY", default="textbelt")
+
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 

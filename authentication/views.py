@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import AuthType, User
 from authentication.models import OTPCode, Purpose, RegistrationSession, Step
 from authentication.serializers import *
-from authentication.utils import generate_otp, generate_password, generate_username
+from authentication.utils import generate_otp, generate_password, generate_username, send_sms
 
 class StartSignupView(APIView):
     permission_classes = [AllowAny]
@@ -42,7 +42,7 @@ class StartSignupView(APIView):
         if email:
             send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [email], fail_silently=False)
         else:
-            print(f"[PHONE OTP] {phone_number}: {otp}")
+            send_sms(phone_number, f"Tasdiqlash kodi: {otp}")
 
         return Response({"status":status.HTTP_200_OK,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi yuborildi"}, status=status.HTTP_201_CREATED)
 
@@ -50,9 +50,9 @@ class ResendCodeView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
         session_id = request.data.get('session_id','')
-        if session_id and not (session.user.is_phone_verified or session.user.is_email_verified):
+        if session_id:
             session = RegistrationSession.objects.filter(id=session_id).select_related('user').first()
-            if session and session.current_step == Step.VERIFY:
+            if session and not (session.user.is_phone_verified or session.user.is_email_verified) and session.current_step == Step.VERIFY:
                 email = session.user.email
                 phone_number = session.user.phone_number
                 otp = generate_otp()
@@ -66,7 +66,7 @@ class ResendCodeView(APIView):
                 if session.user.email:
                     send_mail("Tasdiqlash kodi", f"Sizning kod: {otp}", 'xazratbek123@gmail.com', [session.user.email], fail_silently=False)
                 else:
-                    print(f"[PHONE OTP] {session.user.phone_number}: {otp}")
+                    send_sms(session.user.phone_number, f"Tasdiqlash kodi: {otp}")
 
                 return Response({"status":status.HTTP_201_CREATED,"session_id": str(session.id), "step": Step.VERIFY,"message":f"{email if email else phone_number}-ga tasdiqlash kodi qayta yuborildi"}, status=status.HTTP_201_CREATED)
 
@@ -148,7 +148,7 @@ class UploadAvatarView(APIView):
 
         session = RegistrationSession.objects.select_related("user").filter(id=serializer.validated_data["session_id"]).first()
         if not session:
-            return Response({"detail": "Session topilmadi"}, statuss=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Session topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         avatar = serializer.validated_data.get("avatar")
         if avatar:

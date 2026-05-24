@@ -10,16 +10,19 @@ class CustomUserManager(UserManager):
             return None
         return super().normalize_email(email)
 
-class SellerProfileStatus(models.TextChoices):
-    PENDING = "pending","Jarayonda"
-    APPROVED = "approved", "Qabul qilingan"
-    REJECTED = "rejected","Tasdiqlanmagan"
 
 class AuthType(models.TextChoices):
     EMAIL = "email", "Email"
     PHONE = "phone", "Phone"
 
-class User(AbstractUser,BaseModel):
+
+class SellerApplicationStatus(models.TextChoices):
+    PENDING = "pending", "Pending"
+    APPROVED = "approved", "Approved"
+    REJECTED = "rejected", "Rejected"
+
+
+class User(AbstractUser, BaseModel):
     email = models.EmailField(unique=True, null=True, blank=True)
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     auth_type = models.CharField(
@@ -37,17 +40,15 @@ class User(AbstractUser,BaseModel):
     def __str__(self):
         return self.username
 
-class SellerProfile(models.Model):
+
+class SellerProfile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="seller_profile")
     display_name = models.CharField(max_length=150)
     is_store = models.BooleanField(default=False)
     telegram_username = models.CharField(max_length=100, blank=True)
     phone_visible = models.BooleanField(default=True)
     reply_time_minutes = models.PositiveIntegerField(null=True, blank=True)
-    status = models.CharField(max_length=20,choices=SellerProfileStatus.choices, default=SellerProfileStatus.PENDING)
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    reviewed_at = models.DateTimeField()
-    rejection_reason = models.TextField(null=True,blank=True)
+    active_listing_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.display_name
@@ -56,6 +57,27 @@ class SellerProfile(models.Model):
         db_table = "seller_profiles"
         verbose_name = "Sotuvchi profili"
         verbose_name_plural = "Sotuvchi profillari"
+
+
+class SellerApplication(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="seller_application")
+    status = models.CharField(max_length=20, choices=SellerApplicationStatus.choices, default=SellerApplicationStatus.PENDING)
+    business_name = models.CharField(max_length=180)
+    contact_phone = models.CharField(max_length=20)
+    business_description = models.TextField(blank=True)
+    telegram_username = models.CharField(max_length=100, blank=True)
+    is_store = models.BooleanField(default=True)
+    reviewed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="reviewed_seller_applications")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    rejection_reason = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.status}"
+
+    class Meta:
+        db_table = "seller_applications"
+        verbose_name = "Sotuvchi arizasi"
+        verbose_name_plural = "Sotuvchi arizalari"
 
 
 class SellerFollow(BaseModel):
