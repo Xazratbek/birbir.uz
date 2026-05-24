@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from django.db.models import Q
 from accounts.models import User
+from accounts.serializers import ProfileSerializer
 from authentication.models import RegistrationSession
-
 
 class StartRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
@@ -37,7 +37,6 @@ class CompleteProfileSerializer(serializers.Serializer):
             raise serializers.ValidationError("Bu username band")
         return value
 
-
 class UploadAvatarSerializer(serializers.Serializer):
     session_id = serializers.UUIDField()
     avatar = serializers.ImageField(required=False, allow_null=True)
@@ -61,10 +60,6 @@ class LoginSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("id", "username", "email", "phone_number", "bio", "avatar")
 
 class RegistrationSessionSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)

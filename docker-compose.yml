@@ -36,11 +36,11 @@ services:
     image: redis:8.4-alpine
     hostname: redis
 
-  worker:
+  worker-1:
     build:
       context: .
-    container_name: worker
-    hostname: worker
+    container_name: worker-1
+    hostname: worker-1
     command: celery -A config worker --loglevel=info
     volumes:
       - .:/birbiruz
@@ -48,6 +48,33 @@ services:
       - redis
     depends_on:
       - redis
+      - database
+    environment:
+          - DB_HOST=database
+          - DB_NAME=birbiuz
+          - DB_USER=xazratbek
+          - DB_PASSWORD=196712
+          - DB_PORT=5432
+
+  worker-2:
+    build:
+      context: .
+    container_name: worker-2
+    hostname: worker-2
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/birbiruz
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+    environment:
+          - DB_HOST=database
+          - DB_NAME=birbiuz
+          - DB_USER=xazratbek
+          - DB_PASSWORD=196712
+          - DB_PORT=5432
 
   dashboard:
     build:
@@ -74,6 +101,13 @@ services:
     ports:
       - "5555:5555"
 
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
 
 volumes:
   postgres_data:

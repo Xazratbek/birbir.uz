@@ -10,6 +10,5 @@ urlpatterns = [
     path("signup/session/<uuid:session_id>/", RegistrationSessionDetailView.as_view()),
     path('signup/resendcode/',ResendCodeView.as_view()),
     path("login/", LoginView.as_view()),
-    path("me/", ProfileView.as_view()),
     path('logout/',TokenBlacklistView.as_view())
 ]

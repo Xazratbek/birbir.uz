@@ -10,6 +10,10 @@ class CustomUserManager(UserManager):
             return None
         return super().normalize_email(email)
 
+class SellerProfileStatus(models.TextChoices):
+    PENDING = "pending","Jarayonda"
+    APPROVED = "approved", "Qabul qilingan"
+    REJECTED = "rejected","Tasdiqlanmagan"
 
 class AuthType(models.TextChoices):
     EMAIL = "email", "Email"
@@ -33,15 +37,17 @@ class User(AbstractUser,BaseModel):
     def __str__(self):
         return self.username
 
-
-class SellerProfile(BaseModel):
+class SellerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="seller_profile")
     display_name = models.CharField(max_length=150)
     is_store = models.BooleanField(default=False)
     telegram_username = models.CharField(max_length=100, blank=True)
     phone_visible = models.BooleanField(default=True)
     reply_time_minutes = models.PositiveIntegerField(null=True, blank=True)
-    active_listing_count = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=20,choices=SellerProfileStatus.choices, default=SellerProfileStatus.PENDING)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField()
+    rejection_reason = models.TextField(null=True,blank=True)
 
     def __str__(self):
         return self.display_name

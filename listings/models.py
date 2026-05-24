@@ -30,7 +30,6 @@ class ReportStatusChoice(models.TextChoices):
     REJECTED = "rejected", "Rad etilgan"
     RESOLVED = "resolved", "Hal qilingan"
 
-
 class PromotionTypeChoice(models.TextChoices):
     TOP = "top", "Top"
     URGENT = "urgent", "Shoshilinch"

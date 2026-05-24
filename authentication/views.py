@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.db import transaction
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -176,12 +176,6 @@ class LoginView(APIView):
             "refresh": str(refresh),
             "user": ProfileSerializer(user).data,
         })
-
-
-class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        return Response(ProfileSerializer(request.user).data)
 
 class RegistrationSessionDetailView(APIView):
     permission_classes = [AllowAny]

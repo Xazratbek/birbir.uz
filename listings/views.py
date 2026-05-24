@@ -6,29 +6,10 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from categories.models import Category
-from .models import (
-    CategoryAttribute,
-    CategoryAttributeOption,
-    District,
-    Listing,
-    ListingAttributeValue,
-    ListingContact,
-    ListingImage,
-    ListingView,
-    Region,
-    RegionTypeChoice,
-)
+from .models import *
 from .pagination import ListingPagination
-from .serializers import (
-    DistrictListSerializer,
-    ListingCreateSerializer,
-    ListingDetailSerializer,
-    ListingImageSerializer,
-    ListingListSerializer,
-    RegionListSerializer,
-)
+from .serializers import *
 from .tasks import oddy_task, singleton_task
 from .utils import get_location_details
 
