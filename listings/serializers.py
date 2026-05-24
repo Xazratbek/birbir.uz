@@ -43,11 +43,9 @@ class ListingDetailSerializer(serializers.ModelSerializer):
     region = RegionListSerializer()
     district = DistrictListSerializer()
 
-    # def get_total_views(self, obj):
-    #     return obj.total_views
-
     def get_total_views(self, obj):
-        return obj.views.count()
+        return obj.total_views
+
     class Meta:
         model = Listing
         fields = ['id','title','description','price','currency','listing_category','user','condition','latitude','longitude','status','total_views','address','has_delivery','contact_name','contact_phone','is_negotiable','published_at','expires_at','region','district','images']

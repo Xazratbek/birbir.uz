@@ -29,8 +29,8 @@ class ListingDetailView(RetrieveAPIView):
     lookup_url_kwarg = 'uuid'
 
     def get_object(self):
-        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).select_related('region','district','listing_category').prefetch_related('images','views').first()
-        singleton_task.delay(listing.id)
+        listing = Listing.objects.filter(id=self.kwargs.get('uuid')).select_related('region','district','listing_category').prefetch_related('images','views').annotate(total_views=Count('views')).first()
+        singleton_task.delay(str(listing.id))
         if self.request.user.is_authenticated:
             ListingView.objects.get_or_create(listing=listing,user=self.request.user,session_key=None)
         else:
