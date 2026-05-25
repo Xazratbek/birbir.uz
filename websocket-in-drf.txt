@@ -1,0 +1,279 @@
+DRF'DA WEBSOCKET BO'YICHA TO'LIQ QO'LLANMA (CHAT UCHUN YO'L-XARITA)
+
+Maqsad:
+- Tayyor kod copy-paste bermasdan, seni o'zing mustaqil yozadigan darajada aniq tushuncha berish.
+- DRF loyihasida WebSocket arxitekturasi, xavfsizlik, scaling, monitoring va production masalalarini bosqichma-bosqich tushuntirish.
+
+=================================================================
+1) WEBSOCKET NIMA?
+=================================================================
+WebSocket — bu client (frontend) va server o'rtasida bitta ulanish ochilib, shu ulanish doimiy saqlanadigan protokol.
+HTTP'dan farqi: HTTP odatda request/response (bir yoqlama chaqiriq), WebSocket esa full-duplex (ikkala tomondan ham real-time yuborish/olish).
+
+Oddiy tushuncha:
+- HTTP: "har safar eshikni taqillatib savol berish".
+- WebSocket: "telefon qo'ng'irog'ini ochiq qoldirib gaplashish".
+
+Qachon kerak:
+- Chat, live notification, online/offline status, typing indicator, order status tracking, trading/live scoreboard.
+
+Qachon kerak emas:
+- Kamdan-kam o'zgaradigan ma'lumotlar (masalan, profil ma'lumotlari), oddiy CRUD, backendga 1-2 sekundda bir marta kerak bo'lmagan oqim.
+
+=================================================================
+2) WEBSOCKET QANDAY ISHLAYDI?
+=================================================================
+2.1 Handshake
+- Client avval HTTP orqali "upgrade" so'rovi yuboradi.
+- Server rozilik bersa, ulanish WebSocket'ga o'tadi.
+- Shundan keyin frames orqali ikki tomonga ham xabar ketadi.
+
+2.2 Connection lifecycle
+- CONNECTING -> OPEN -> CLOSING -> CLOSED.
+- Frontend reconnect logikasiga ega bo'lishi shart (network uzilishi oddiy holat).
+
+2.3 Frame va payload
+- Odatda JSON payload yuboriladi.
+- Har bir xabarga event turi qo'yiladi: message.new, message.read, typing.start, typing.stop, room.join va hokazo.
+
+=================================================================
+3) DRF + WEBSOCKET: TO'G'RI STACK TANLASH
+=================================================================
+Muhim: DRF o'zi to'g'ridan-to'g'ri WebSocket framework emas.
+DRF HTTP API uchun, WebSocket uchun Django Channels qo'llanadi.
+
+Minimal stack:
+- Django + DRF (HTTP API)
+- Django Channels (WebSocket handling)
+- Redis (channel layer, fan-out, pub/sub)
+- ASGI server (uvicorn/daphne)
+
+Nima uchun Redis kerak:
+- Bir nechta worker instance bo'lganda xabarlarni bir-biriga yetkazish.
+- Group broadcast (masalan room ichidagi barcha userlarga jo'natish).
+
+=================================================================
+4) AMALDA QURILISH ARXITEKTURASI
+=================================================================
+4.1 Tavsiya etilgan qatlamlar
+1) HTTP API (DRF):
+   - chat room list, oldingi message pagination, unread count, read receipt bulk update va hokazo.
+2) WebSocket (Channels):
+   - yangi xabar live push, typing, online holat, real-time eventlar.
+3) Background job (Celery optional):
+   - push notification, heavy media process.
+
+4.2 Nima HTTP'da qoladi, nima WS'ga o'tadi?
+HTTP:
+- Roomlar ro'yxati
+- Tarixiy xabarlar (pagination bilan)
+- Qidiruv/filter
+- Foydalanuvchi sozlamalari
+
+WebSocket:
+- Yangi xabar kelishi
+- typing indicator
+- read receipt signal
+- online/offline heartbeat
+
+=================================================================
+5) AUTENTIFIKATSIYA VA XAVFSIZLIK
+=================================================================
+5.1 Token bilan autentifikatsiya
+JWT ishlatayotganing uchun odatda 2 usul bor:
+- Query param orqali token (eng oson, lekin URL loglarda ko'rinishi mumkin)
+- Header/cookie orqali token (xavfsizroq yo'nalish)
+
+Tavsiya:
+- Production'da secure cookie + short-lived access token + refresh strategiya.
+- WebSocket ulanishda tokenni tekshiradigan custom auth middleware yozish.
+
+5.2 Authorization (eng muhim)
+- Roomga ulanishdan oldin user shu room a'zosi ekanini tekshir.
+- Seller/Buyer bo'lmagan user message yubora olmasin.
+- Listing egasiga tegishli chatga begona user kirmasin.
+
+5.3 Validation
+- Har payload serializer-schema bilan tekshirilsin.
+- message uzunligi, bo'sh matn, flooding, spam limit.
+
+5.4 Rate limit
+- Har userga message/sec limit.
+- DDoS yoki flood bo'lsa connectionni soft block.
+
+5.5 Moderation
+- Blacklist so'zlar, report flow, suspicious activity logging.
+
+=================================================================
+6) CHAT UCHUN EVENT DIZAYN (TAYYOR KOD EMAS, FORMAT)
+=================================================================
+Senga qulay bo'lishi uchun event contract'ni oldindan kelishib ol:
+
+Client -> Server eventlar:
+- room.join
+- room.leave
+- message.send
+- message.read
+- typing.start
+- typing.stop
+- ping
+
+Server -> Client eventlar:
+- room.joined
+- message.created
+- message.ack
+- message.read.updated
+- typing.updated
+- error
+- pong
+
+Har eventda minimal umumiy fieldlar bo'lsin:
+- event
+- room_id
+- request_id (idempotency uchun)
+- timestamp
+- payload
+
+Nega request_id kerak?
+- Client qayta yuborib yuborsa duplicate saqlanishni oldini oladi.
+
+=================================================================
+7) XABARLARNI SAQLASH VA KONSISTENTLIK
+=================================================================
+7.1 DB yozish tartibi
+- Avval DB'ga message saqla.
+- Keyin group'ga broadcast qil.
+Shunda xabar ishonchli saqlangan bo'ladi.
+
+7.2 Ack mexanizmi
+- Client message yuborganda vaqtincha local status: "sending"
+- Server qabul qilib saqlagach: "sent" ack qaytaradi.
+- Receiver o'qiganda: "read" status.
+
+7.3 Duplicate oldini olish
+- request_id + unique constraint strategiyasi.
+
+=================================================================
+8) FRONTEND BILAN TO'G'RI INTEGRATSIYA
+=================================================================
+8.1 Ulanish qoidasi
+- Login bo'lgach websocket ochiladi.
+- Logout bo'lgach websocket yopiladi.
+- Token yangilanganda reconnect yoki auth refresh strategiya.
+
+8.2 Reconnect strategiya
+- Exponential backoff: 1s, 2s, 4s, 8s... max cap.
+- Tarmoq qaytsa auto-reconnect.
+- Reconnect bo'lgach room.join'larni qayta yubor.
+
+8.3 Offline-first
+- Ulanish yo'q bo'lsa yuborilgan xabar local queue'da tursin.
+- Ulanish tiklanganda ketma-ket flush qilinsin.
+
+8.4 UI statuslar
+- online/offline indikator
+- connecting holati
+- message statuslari: sending/sent/read/error
+
+=================================================================
+9) KATTA YUKLAMA VA SCALING
+=================================================================
+9.1 Horizontal scaling
+- Bir nechta ASGI worker ishlaganda Redis channel layer shart.
+
+9.2 Sticky session kerakmi?
+- Channels + Redis bilan ko'p holatda shart emas.
+- Lekin infraga qarab ALB/Nginx sozlamalarni tekshir.
+
+9.3 Backpressure
+- Juda ko'p event kelsa queue to'lib qolmasin.
+- Typing eventlarni throttle/debounce qil.
+
+=================================================================
+10) LOG, MONITORING, DEBUG
+=================================================================
+Kirit:
+- Connection count
+- Active room count
+- Message throughput (msg/sec)
+- Error rate
+- Reconnect rate
+- Avg delivery latency
+
+Loglarga qo'sh:
+- user_id
+- room_id
+- event type
+- request_id
+
+Bu productionda muammo topishda juda katta yordam beradi.
+
+=================================================================
+11) TEST STRATEGIYA
+=================================================================
+11.1 Unit test
+- Event payload validation
+- Permission checks
+
+11.2 Integration test
+- Ikki user bitta roomda xabar almashishi
+- Begona user roomga kira olmasligi
+
+11.3 Load test
+- 1k+ concurrent connection ssenariylari
+- Burst message testi
+
+11.4 Failure test
+- Redis vaqtincha o'chsa nima bo'ladi
+- Client interneti uzilib-qaytsa qanday tiklanadi
+
+=================================================================
+12) KAMCHILIKLAR VA RISKLAR
+=================================================================
+Afzalliklar:
+- Real-time UX
+- Kam latency
+- Kam poll request
+
+Kamchiliklar:
+- Infrastrukturasi murakkabroq
+- Connection management qiyinroq
+- Monitoring bo'lmasa debug og'ir
+- Notog'ri auth bo'lsa xavfsizlik riski yuqori
+
+=================================================================
+13) DRF LOYIHANG UCHUN AMALIY YO'L-XARITA
+=================================================================
+1) Avval HTTP chat API'ni to'liq tugat:
+   - room list
+   - message history pagination
+   - unread count
+   - read endpoint
+2) Keyin WS event contractni hujjatlashtir.
+3) Channels + Redis ulanishini qo'y.
+4) Auth middleware yoz.
+5) room authorization ni qattiq tekshir.
+6) message.send + message.created + ack ni bitir.
+7) typing + read receipt qo'sh.
+8) reconnect/offline logikani frontendda bitir.
+9) monitoring + load testdan o'tkaz.
+
+=================================================================
+14) ENG KO'P QILINADIGAN XATOLAR
+=================================================================
+- Barcha ma'lumotni WSga o'tkazib yuborish (history ham WSdan olib kelish)
+- Permissionni faqat frontendda tekshirish
+- request_id ishlatmaslik
+- Token expiry holatini hisobga olmaslik
+- Reconnectdan keyin room.joinlarni unutish
+- Typing eventni throttlesiz yuborish
+
+=================================================================
+15) XULOSA
+=================================================================
+Senga eng to'g'ri yondashuv:
+- DRF'ni CRUD/history/auth uchun ishlat.
+- WS'ni faqat real-time signal uchun ishlat.
+- Event contract + authorization + reconnect + monitoringni boshidan to'g'ri qil.
+
+Shu yo'l bilan chat qismi real company darajasidagi arxitekturaga yaqinlashadi.

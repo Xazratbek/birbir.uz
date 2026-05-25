@@ -1,67 +1,292 @@
-TZ (Pending)
+BIRBIR.UZ FRONTENDNI TO'LIQ ISHGA TUSHIRISH UCHUN TZ (YANGILANGAN)
 
-1. Seller profile API
-- `GET /sellers/{user_id}/`
-- `PATCH /seller-profile/me/`
+Maqsad:
+- Hozirgi backend API'lardan maksimal foydalanib frontendni productionga yaqin holatga olib chiqish.
+- Allaqachon backendda bor bo'lgan tasklarni takrorlamaslik.
+- Junior frontend developer'ga aniq va ketma-ket topshiriq berish formatida yozish.
 
-Serializer:
-- `SellerProfileSerializer`
-  - `user_id`
-  - `display_name`
-  - `avatar`
-  - `bio`
-  - `is_verified`
-  - `is_store`
-  - `telegram_username`
-  - `phone_visible`
-  - `reply_time_minutes`
-  - `active_listing_count`
-  - `followers_count`
+================================================================================
+0) SCOPE VA QABUL QILISH KRITERIYASI
+================================================================================
+Scope:
+- Web frontend (desktop first, keyin responsive)
+- API integration
+- Auth/token lifecycle
+- Core pages: Main, Kategoriya, Listing detail, Favorites, Profile, My listings, Create listing
+- Chat uchun websocketga tayyor holat (UI + state + API tayyorligi), websocket implementationni keyin alohida taskda qilinadi.
 
-2. Seller follow API
-- `POST /sellers/{id}/follow/`
-- `DELETE /sellers/{id}/follow/`
+Done definition (har task uchun umumiy):
+- UI rasmga vizual yaqin (spacing, typography, ranglar)
+- Error/loading/empty state bor
+- API responsega mos rendering bor
+- Access token expiry holati boshqarilgan
+- Manual QA checklistdan o'tgan
 
-Response:
-- `seller_id`
-- `is_following`
-- `followers_count`
+================================================================================
+1) BACKENDDA HOZIR MAVJUD API'LAR (FRONTEND FOYDALANADIGAN)
+================================================================================
+AUTH:
+- POST /api/auth/signup/start/
+- POST /api/auth/signup/verify/
+- POST /api/auth/signup/profile/
+- POST /api/auth/signup/avatar/
+- GET  /api/auth/signup/session/{session_id}/
+- POST /api/auth/signup/resendcode/
+- POST /api/auth/login/
+- POST /api/auth/logout/
+- POST /api/token/refresh/
 
-3. Listing report API
-- `POST /listings/{id}/report/`
-- `GET /my/reports/` (admin/moderation keyin)
+ACCOUNT / SELLER:
+- GET  /accounts/me/
+- PATCH /accounts/profile/update/{uuid}/
+- GET  /accounts/sellers/
+- GET  /accounts/sellers/{uuid}/
+- POST /accounts/sellers/{pk}/follow-toggle/
+- PATCH /accounts/seller/profile/{pk}/
+- POST /accounts/seller/apply/
+- GET  /accounts/seller/application-status/
+- POST /accounts/seller/applications/{application_id}/review/   (admin)
 
-Serializer:
-- `ListingReportCreateSerializer`
-  - `reason`
-  - `comment`
+CATEGORIES:
+- GET /categories/
 
-4. Promotion API
-- `GET /promotion-types/`
-- `POST /listings/{id}/promotions/`
-- `GET /listings/{id}/promotions/`
+LISTINGS:
+- GET  /elonlar/
+- GET  /elonlar/{uuid}/
+- POST /elonlar/create/
+- GET  /elonlar/reports/
+- POST /elonlar/reports/
+- GET  /elonlar/regions/
+- GET  /elonlar/regions/{slug}/districts/
 
-Serializer:
-- `ListingPromotionSerializer`
-  - `id`
-  - `promotion_type`
-  - `starts_at`
-  - `ends_at`
-  - `is_active`
+FAVORITES:
+- GET    /favorites/
+- POST   /favorites/create/
+- DELETE /favorites/delete/
 
-5. Favorite API
-- `POST /listings/{id}/favorite/`
-- `DELETE /listings/{id}/favorite/`
+DOCS:
+- GET /api/schema/swagger-ui/
+
+================================================================================
+2) FRONTEND GLOBAL ARXITEKTURA TASKLARI (YETISHMAYOTGAN ASOSIYLAR)
+================================================================================
+TASK FE-01: App skeleton va core infra
+- Router (public/private route)
+- Layoutlar: MainLayout, ProfileLayout, FullFormLayout
+- Theme tokens (color, spacing, radius) screenshotlarga mos
+- API client (baseURL, timeout, interceptors)
+
+Acceptance:
+- Loyihada bitta markaziy API service ishlaydi
+- Barcha sahifalar layout orqali bir xil header/navbar oladi
+
+
+TASK FE-02: Auth state manager + token lifecycle
+- access/refresh token storage strategiyasi (xavfsiz variant)
+- Login holatda user state bootstrap (`/accounts/me/`)
+- 401 bo'lsa refresh token orqali `/api/token/refresh/` chaqirish
+- Refresh muvaffaqiyatsiz bo'lsa logout + login sahifaga redirect
+- Parallel requestlar uchun bitta refresh queue mexanizmi
+
+Acceptance:
+- Access token eskirsa user sezmasdan session davom etadi
+- Refresh ham yaroqsiz bo'lsa toza logout bo'ladi
+
+
+TASK FE-03: UI component library (minimum)
+- Button, Input, Select, Textarea, Tabs, Card, Badge, Modal, Drawer
+- Skeleton/Spinner
+- Empty/Error blocks
+- Toast notification
+
+Acceptance:
+- Barcha asosiy ekranlar shu componentlar bilan yig'ilgan
+
+================================================================================
+3) SCREEN-BY-SCREEN TASKLAR (RASMLARGA MOS)
+================================================================================
+TASK FE-04: Main page (1-rasm)
+- Top navbar (logo, location, lang, icon menus, sotish button)
+- Search input
+- Category tiles (API'dan)
+- Promotional banner/slider section (hozircha mock bo'lishi mumkin)
+- Listing grid: `/elonlar/` dan keladigan itemlar
+- Pagination/infinite scroll
+
+Acceptance:
+- `/elonlar/` pagination bilan ishlaydi
+- Listing kartada asosiy image, title, narx, lokatsiya ko'rsatiladi
+
+
+TASK FE-05: Kategoriya mega panel (2-rasm)
+- `/categories/` response tree'dan multi-column panel
+- Category -> subcategory -> child rendering
+- "Yana N" expand/collapse
+- Search bilan category filter
+
+Acceptance:
+- Category panelda nested tuzilma to'g'ri chiqadi
+
+
+TASK FE-06: Profile shell + sidebar (3-rasm)
+- Navbar tepada saqlanadi
+- Chapda profile sidebar (sevimlilar, e'lonlarim, xabarlar, til, chiqish)
+- Markaziy content area route-based
+- `/accounts/me/` dan user info render
+
+Acceptance:
+- Sidebar item bosilganda content almashadi, layout buzilmaydi
+
+
+TASK FE-07: Public profile view (4-rasm)
+- `/accounts/sellers/{uuid}/` bilan seller profili
+- Follow/unfollow tugma (`follow-toggle`)
+- Seller listinglar bo'limi (filter active/archive UI)
+- Rating/feedback placeholder (API bo'lmaguncha read-only UI)
+
+Acceptance:
+- Seller detail sahifasi API data bilan to'liq render bo'ladi
+
+
+TASK FE-08: Create listing page (5-rasm)
+- Multi-section form: rasmlar, nom, kategoriya, tavsif, joylashuv, aloqa
+- `GET /categories/` dan category tanlash
+- `GET /elonlar/regions/`, `.../districts/` bilan region/district tanlash
+- Image uploader (10 tagacha, tartiblash UI)
+- Contact toggles: chat/call/telegram
+- Submit: `POST /elonlar/create/`
+
+Acceptance:
+- Validation va backend errorlar field-level ko'rinadi
+- Successda detail yoki my listing sahifasiga o'tadi
+
+================================================================================
+4) PROFILE ICHIDAGI FLOW TASKLARI (3-rasmga mos)
+================================================================================
+TASK FE-09: Sevimlilar
 - `GET /favorites/`
+- Toggle save: `POST /favorites/create/`
+- Remove: `DELETE /favorites/delete/` (backend contractga mos id bilan)
 
-Serializer:
-- `FavoriteListSerializer`
-  - `id`
-  - `listing`
+TASK FE-10: Mening e'lonlarim
+- Hozir alohida my-listings endpoint yo'q: vaqtinchalik client-side filter (owner = me) yoki backend task ochilsin
+- Active/archive UI tayyorla
 
-6. User verify API
-- `POST /users/me/verify/complete/`
+TASK FE-11: Profilni tahrirlash
+- `PATCH /accounts/profile/update/{uuid}/`
+- Avatar/username/bio update
 
-Logika:
-- MyID tasdiq muvaffaqiyatli bo'lsa `user.is_verified = True`
-- `verified user` badge seller serializerlarda qaytadi
+TASK FE-12: Seller application
+- `POST /accounts/seller/apply/`
+- `GET /accounts/seller/application-status/`
+- Statusga qarab badge/panel (pending/approved/rejected)
+
+================================================================================
+5) CHAT UCHUN FRONTEND TAYYORGARLIK (WS IMPLEMENT QILMASDAN OLDIN)
+================================================================================
+TASK FE-13: Chat UI skeleton
+- Rooms list panel
+- Active dialog panel
+- Message bubble component
+- Typing indicator joyi
+- Read status ikonkalari
+
+TASK FE-14: Chat state contract
+- message entity shape
+- room entity shape
+- optimistic sending state (sending/sent/read/error)
+- reconnectga tayyor queue interfeysi
+
+TASK FE-15: WS integration hooks (placeholder)
+- connect/disconnect lifecycle
+- event dispatcher interface
+- keyin websocket-in-drf.txt bo'yicha implement qilinadi
+
+================================================================================
+6) TO'LIQ FRONTEND USER FLOW (MAVJUD API'LAR BO'YICHA)
+================================================================================
+FLOW A: Signup + onboarding
+1. User phone/email kiritadi -> `POST /api/auth/signup/start/`
+2. OTP kiritadi -> `POST /api/auth/signup/verify/`
+3. Profil ma'lumotlari -> `POST /api/auth/signup/profile/`
+4. Avatar yuklaydi -> `POST /api/auth/signup/avatar/`
+5. Session holatini tekshirish -> `GET /api/auth/signup/session/{session_id}/`
+
+FLOW B: Login/session
+1. Login -> `POST /api/auth/login/` (access + refresh)
+2. App ochilganda me -> `GET /accounts/me/`
+3. Access eskirsa -> `POST /api/token/refresh/`
+4. Logout -> `POST /api/auth/logout/`
+
+FLOW C: Main browsing
+1. Categorylar -> `GET /categories/`
+2. Listing feed -> `GET /elonlar/` (pagination)
+3. Listing detail -> `GET /elonlar/{uuid}/`
+
+FLOW D: Favorite
+1. Save/unsave -> `POST /favorites/create/`
+2. Favorites list -> `GET /favorites/`
+3. Remove -> `DELETE /favorites/delete/`
+
+FLOW E: Seller va profile
+1. Sellerlar list -> `GET /accounts/sellers/`
+2. Seller detail -> `GET /accounts/sellers/{uuid}/`
+3. Follow/unfollow -> `POST /accounts/sellers/{pk}/follow-toggle/`
+4. O'z profilini update -> `PATCH /accounts/profile/update/{uuid}/`
+
+FLOW F: Listing create
+1. Regions -> `GET /elonlar/regions/`
+2. Districts -> `GET /elonlar/regions/{slug}/districts/`
+3. Create listing -> `POST /elonlar/create/`
+4. Muammo/report -> `POST /elonlar/reports/`
+
+================================================================================
+7) ACCESS TOKEN AUTO-REFRESH LOGIKASI (ANIQ TEXNIK TALAB)
+================================================================================
+Talab:
+- Har protected request access token bilan yuboriladi.
+- 401 qaytsa requestni darhol fail qilmasdan refresh jarayonini ishga tushiradi.
+- Refresh ketayotganda boshqa 401 requestlar queue'da kutadi.
+- Refresh muvaffaqiyatli bo'lsa queue dagilar yangi access token bilan retry.
+- Refresh xato bo'lsa hammasi reject + logout.
+
+Qo'shimcha:
+- Token expiry vaqtini oldindan tekshirib proactive refresh qilish mumkin.
+- Tablar oralig'ida session sync (storage event / broadcast channel) bo'lsa yaxshi.
+
+================================================================================
+8) JUNIORLARGA REAL COMPANY FORMATIDA KETMA-KET TASK PLANI (SPRINT)
+================================================================================
+SPRINT 1 (Foundation)
+- FE-01, FE-02, FE-03
+
+SPRINT 2 (Marketplace core)
+- FE-04, FE-05, FE-08
+
+SPRINT 3 (Account/profile)
+- FE-06, FE-07, FE-09, FE-11, FE-12
+
+SPRINT 4 (Stabilization)
+- FE-10, FE-13, FE-14, FE-15
+- QA, bugfix, performance
+
+================================================================================
+9) QO'SHIMCHA BACKLOG (BACKEND BILAN KELISHILADIGAN)
+================================================================================
+- My listings uchun aniq endpoint (`/accounts/me/listings` kabi)
+- Chat uchun room/message API + websocket endpoint contract
+- Notification API
+- Listing promotion API frontendga tayyorlash
+- Moderation/report admin flow
+
+================================================================================
+10) QABUL TEST CHECKLIST (MANUAL QA)
+================================================================================
+- Login holatda sahifa refresh qilinganda user session saqlanadimi?
+- Access token tugaganda requestlar avtomatik tiklanadimi?
+- Main sahifada category + listinglar API bilan to'g'ri chiqadimi?
+- Create listing form backend validatsiyalarini to'g'ri ko'rsatadimi?
+- Profile sahifa layout rasmga mosmi?
+- Favorites toggle izchil ishlaydimi?
+- Network xatolarida foydalanuvchiga tushunarli habar chiqadimi?
+
