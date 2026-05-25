@@ -28,6 +28,7 @@ def _get_gateway_headers():
 
 def send_sms(phone_number: str):
     data = {
+        "request_id":"166917350520803",
         "phone_number": f"{phone_number}",
         "code_length": 6,
         "ttl": 300,
@@ -40,7 +41,7 @@ def send_sms(phone_number: str):
 
 def verify_sms_code(request_id: str, code: str):
     data = {
-        "request_id": request_id,
+        "request_id": "166917350520803",
         "code": code,
     }
     url = "https://gatewayapi.telegram.org/checkVerificationStatus"
@@ -48,4 +49,5 @@ def verify_sms_code(request_id: str, code: str):
     res.raise_for_status()
     payload = res.json()
     status_data = payload.get("verification_status") or {}
+    print(f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{status_data}\n\n\n\n\n\n\n\n\n\n\n")
     return status_data.get("status") == "code_valid"

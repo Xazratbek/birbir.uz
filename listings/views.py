@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models import Count
 from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView, RetrieveAPIView, ListCreateAPIView, CreateAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from categories.models import Category
@@ -181,3 +181,22 @@ class DistrictsListAPIView(ListAPIView):
     def get_queryset(self):
         slug = self.kwargs.get("slug")
         return District.objects.filter(region__slug=slug)
+
+class ListingReportListCreateView(ListCreateAPIView):
+    serializer_class = ListingReportCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ListingReport.objects.filter(reporter=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(reporter=self.request.user)
+
+
+class PromotionsListView(ListAPIView):
+    queryset = ListingPromotion.objects.all()
+    serializer_class = ListingPromotionSerializer
+
+class PromotionCreateAPIView(CreateAPIView):
+    serializer_class = ListingPromotionSerializer
+    permission_classes = [IsAdminUser]

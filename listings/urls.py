@@ -5,12 +5,14 @@ from .views import (
     ListingDetailView,
     ListingCreateAPIView,
     RegionsListAPIView,
+    ListingReportListCreateView,
 )
 
 urlpatterns = [
     path("", ListingListAPIView.as_view()),
     path("<uuid:uuid>/", ListingDetailView.as_view()),
     path("create/", ListingCreateAPIView.as_view()),
+    path("reports/", ListingReportListCreateView.as_view()),
     path("regions/", RegionsListAPIView.as_view()),
     path("regions/<slug:slug>/districts/", DistrictsListAPIView.as_view()),
 ]

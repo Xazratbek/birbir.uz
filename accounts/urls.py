@@ -1,16 +1,6 @@
 from django.urls import path
 
-from .views import (
-    ProfileUpdateView,
-    ProfileView,
-    SellerApplicationCreateView,
-    SellerApplicationReviewView,
-    SellerApplicationStatusView,
-    SellerFollowOrDeleteAPI,
-    SellerProfileDetailView,
-    SellerProfileUpdate,
-    SellerProfilesView,
-)
+from .views import *
 
 urlpatterns = [
     path("profile/update/<uuid:uuid>/", ProfileUpdateView.as_view()),

@@ -1,20 +1,7 @@
-from django.db import transaction
 from rest_framework import serializers
-
 from accounts.serializers import UserSerializer
-from categories.models import Category
 from categories.serializers import CategorySerializer
-from .models import (
-    CategoryAttribute,
-    CategoryAttributeOption,
-    District,
-    Listing,
-    ListingAttributeValue,
-    ListingContact,
-    ListingImage,
-    Region,
-)
-
+from .models import *
 
 class RegionListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -260,3 +247,14 @@ class ListingCreateSerializer(serializers.Serializer):
         if not (attrs.get("allow_chat") or attrs.get("allow_call") or attrs.get("allow_telegram")):
             raise serializers.ValidationError("Kamida bitta aloqa usuli tanlanishi kerak.")
         return attrs
+
+
+class ListingReportCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListingReport
+        fields = ['listing','reason','comment']
+
+class ListingPromotionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListingPromotion
+        fields = ['listing','promotion_type','starts_at','ends_at','is_active']

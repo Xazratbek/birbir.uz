@@ -6,6 +6,7 @@ from accounts.models import SellerApplication, SellerFollow, SellerProfile, User
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         "username",
         "email",
         "phone_number",

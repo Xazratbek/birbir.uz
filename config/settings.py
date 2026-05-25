@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "storages",
     "rest_framework",
     "rest_framework_simplejwt",
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -120,7 +121,14 @@ USE_TZ = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'BirBir.uz website API',
+    'DESCRIPTION': 'birbir.uz loyihasi clone versiyasi DRF bilan',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 SUPABASE_PROJECT_ID = env('SUPABASE_PROJECT_ID')
@@ -181,15 +189,16 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "DEBUG",
+        "level": "INFO",
     },
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": False,
         },
     },
 }
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
+TELEGRAM_GATEWAY_TOKEN = env('TELEGRAM_GATEWAY_TOKEN')
